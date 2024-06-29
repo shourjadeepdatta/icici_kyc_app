@@ -1,0 +1,4 @@
+const states = {
+    panResult : undefined
+}
+

@@ -7,20 +7,22 @@ import ReturnButton from "./ReturnButton";
 import Header from "./Header";
 
 function Personal() {
+    const panResult = JSON.parse(localStorage.getItem("user_pan_data"));
+    console.log("slkdmsldmd-.>>",panResult);
     return (
         <div>
             <Navbar></Navbar>
-            <ReturnButton></ReturnButton>
             <div className="content_container">
+
                 <Header title="Confirm your mobile number and email address"></Header>
                 {/* <div className="header_dialogue">
                     <h3>Confirm your mobile number and email address</h3>
                 </div> */}
-            <PersonalForm firstTitle="Mobile Number" secondTitle="Email Address" value1="XXXXXXXX04" value2="shXXXXXXX@gmail.com"></PersonalForm>
-            <Digilocker></Digilocker>
+                <PersonalForm firstTitle="Mobile Number" secondTitle="Email Address" value1={panResult?.APP_MOB_NO ?? "null"} value2={panResult?.APP_EMAIL ?? "null"}></PersonalForm>
+                <Digilocker></Digilocker>
             </div>
         </div>
-            
+
     );
 }
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ReturnButton from "./ReturnButton";
 import Navbar from "./Navbar";
 import Header from "./Header";
@@ -7,11 +8,17 @@ import PersonalForm from "./PersonalForm";
 import Button from "./Button";
 
 function Address() {
+    let navigate = useNavigate();
     const [selectedOption, setSelectedOption] = useState('');
     const [correspondenceOption,setCorrespondenceOption] = useState('');
     const [UploadFileOption,setUploadFileOption] = useState('');
     const [selectedFile,setSelectedFileOption] = useState(null);
+    const user_data = JSON.parse(localStorage.getItem("user_pan_data"));
 
+    const moveToNextPage = ()=>{
+        console.log("going to take photo now");
+        navigate("/takePhoto");
+    }
     const handleSelectChangePermanentAddress = (event) => {
         console.log("setting the state variable the selected option");
         setSelectedOption(event.target.value);
@@ -41,48 +48,45 @@ function Address() {
     return (
         <div>
             <Navbar></Navbar>
-            <ReturnButton></ReturnButton>
             <Header title="Address details"></Header>
             <div className="dropdown_container">
                 <div className="dropdown_title">
                     <label className="permanent_address_label">Permanent Address</label>
                 </div>
-                <select value={selectedOption} className="select_bar" onChange={handleSelectChangePermanentAddress}>
+                <select value={selectedOption} className="select_bar input_style" onChange={handleSelectChangePermanentAddress}>
                     <option>Select an option</option>
                     <option>Address as per Aadhar</option>
                 </select>
 
                 {selectedOption === "Address as per Aadhar" &&
                 <div className="display_address_container">
-                    <label className="display_address">1C/702 NG Suncity phase 3, Kandivali east, thakur village, Mumbai, maharashtra, 400101</label>
+                    <label className="display_address">{user_data?.APP_PER_ADD1}, {user_data?.APP_PER_STATE}, {user_data?.APP_PER_CITY}, {user_data?.APP_PER_PINCD}</label>
                 </div>
                 }
 
                 <div className="dropdown_title">
                     <label className="correspondence_address_label">Correspondence Address</label>
                 </div>
-                <select value={correspondenceOption} className="select_bar" onChange={handleSelectChangeCorrespondenceAddress}>
+                <select value={correspondenceOption} className="select_bar input_style" onChange={handleSelectChangeCorrespondenceAddress}>
                     <option>Select an option</option>
-                    <option>Address as per Aadhar</option>
-                    <option>Address as per KRA</option>
-                    <option>New Address</option>
+                    <option>Address as per KRA</option> 
                 </select>
 
-                {correspondenceOption === "New Address" && (
+                {correspondenceOption === "Address as per KRA" && (
                     <div>
-                    <PersonalForm firstTitle="Address line 1" secondTitle="Address line 2" value1="" value2=""></PersonalForm>
-                    <PersonalForm firstTitle="City" secondTitle="State" value1="" value2=""></PersonalForm>
+                    <PersonalForm firstTitle="Address line 1" secondTitle="Address line 2" value1={user_data?.APP_COR_ADD1 ?? "NA"} value2={user_data?.APP_COR_ADD2 ?? "NA"}></PersonalForm>
+                    <PersonalForm firstTitle="City" secondTitle="State" value1={user_data?.APP_COR_CITY ?? "NA"} value2={user_data?.APP_COR_STATE ?? "NA"}></PersonalForm>
                     <div className="pincode_container">
                         <div className="form-group">
                         <label htmlFor="pincode">Pincode</label>
-                        <input type="text" className="form-control" id="pincode"/>
+                        <input type="text" className="form-control input_style" id="pincode" defaultValue={user_data?.APP_COR_PINCD ?? "NA"}/>
                         </div>
                     </div>
                     
                     <div className="dropdown_title">
                         <label className="address_prood_label">Choose the address proof below</label>
                     </div>
-                    <select value={UploadFileOption} className="select_bar" onChange={handleSelectChangeAddressProod}>
+                    <select value={UploadFileOption} className="select_bar input_style" onChange={handleSelectChangeAddressProod}>
                         <option>Select an option</option>
                         <option>Gas receipt</option>
                         <option>Electricity Bill</option>
@@ -90,8 +94,7 @@ function Address() {
                     </select>
 
                     <div className="file_upload_field">
-                    <label htmlFor="fileUpload">Choose file:</label>
-                        <input type="file" id="fileUpload" onChange={handleFileUpload}/>
+
                     </div>
                 </div>
                 )}
@@ -104,7 +107,9 @@ function Address() {
                         <button onClick={handleRemoveFile}>Remove</button>
                     </div>
                 )}
-                <Button></Button>
+                <div className="digi_button">
+                        <button onClick={moveToNextPage} type="submit" className="btn btn-success btn-block mt-3">Continue</button>
+                    </div>
 
             </div>
         </div>

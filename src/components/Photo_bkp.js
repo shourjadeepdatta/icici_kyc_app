@@ -48,18 +48,13 @@ function Photo() {
         getSavedCameraStream();
 
         return () => {
-            stopCameraStream();
+            if (videoRef.current && videoRef.current.srcObject) {
+                const stream = videoRef.current.srcObject;
+                const tracks = stream.getTracks();
+                tracks.forEach(track => track.stop());
+            }
         };
     }, []);
-
-    const stopCameraStream = () => {
-        if (videoRef.current && videoRef.current.srcObject) {
-            const stream = videoRef.current.srcObject;
-            const tracks = stream.getTracks();
-            tracks.forEach(track => track.stop());
-            videoRef.current.srcObject = null;
-        }
-    };
 
     const handleCapture = () => {
         setIsShutterVisible(true);
@@ -80,13 +75,13 @@ function Photo() {
 
     const resetCapture = () => {
         setCapturedImage(null);
+        // setIsVideoVisible(true);
         localStorage.removeItem('capturedImage');
         window.location.reload();
     };
 
     const handleContinue = () => {
         console.log("Continue to the next step");
-        stopCameraStream();
         localStorage.removeItem('cameraStream');
         navigate('/Details');
     };
@@ -127,7 +122,7 @@ function Photo() {
                                 cursor: 'pointer'
                             }}
                         >
-                           Reset Photo
+                            Reset Photo
                         </button>
                     )}
                 </div>
