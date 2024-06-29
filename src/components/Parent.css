@@ -30,7 +30,7 @@
     box-shadow: 0 4px 2px -2px rgb(214, 212, 212);
 }
 .security_logo{
-    font-size: 15px;
+    font-size: 12px;
     color: grey;
 }
 
@@ -305,3 +305,10 @@
     pointer-events: none;
     opacity: 1;
   }
+
+
+.parent_span {
+    display: flex;
+    justify-content:center;
+    align-items: flex-end;
+}
