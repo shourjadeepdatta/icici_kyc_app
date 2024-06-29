@@ -1,5 +1,5 @@
 import React from "react";
-
+import {ReactComponent as EditIcon} from "../assets/images/edit-2-svgrepo-com.svg";
 
 function PersonalForm(props) {
     return (
@@ -8,15 +8,15 @@ function PersonalForm(props) {
                 <form className="form_container_v2">
             <div className="mobile_container">
                 <div className="form-group">
-                <label htmlFor="pan">{props.firstTitle}</label>
-                <input type="text" className="form-control" id="pan" defaultValue={props.value1} />
+                    <label htmlFor="pan">{props.firstTitle}</label>
+                    <input type="text" className="form-control input_style" id="pan" defaultValue={props.value1} />
                 </div>
-                </div>
+            </div>
 
             <div className="email_container">
                 <div className="form-group">
                     <label htmlFor="pan">{props.secondTitle}</label>
-                    <input type="text" className="form-control" id="pan" defaultValue={props.value2} />
+                    <input type="text" className="form-control input_style" id="pan" defaultValue={props.value2} />
                 </div>
             </div>
             </form>
