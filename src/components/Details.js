@@ -20,7 +20,9 @@ function Details() {
     return (
         <div>
             <Navbar></Navbar>
-            <Header title="Final review"></Header>
+            <div className="container">
+                <Header title="Final review"></Header>
+            </div>
             <label className="detail_filler">One last step before we finish your KYC process.</label>
             <hr />
         <div className="details-container">    

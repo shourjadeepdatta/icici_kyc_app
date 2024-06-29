@@ -94,7 +94,9 @@ function Photo() {
     return (
         <div>
             <Navbar />
-            <Header title="Capture Photo" />
+            <div className="container">
+                <Header title="Capture Photo"/>
+            </div>
             <div className="content_container">
                 {isLoading && (
                     <div className="loader-overlay">
@@ -107,7 +109,7 @@ function Photo() {
                     <div className="capture_image_container">
                         {isShutterVisible && <div className="shutter"></div>}
                         {isVideoVisible ? (
-                            <video ref={videoRef} autoPlay playsInline style={{ maxWidth: '100%', maxHeight: '100%' }} />
+                            <video ref={videoRef} autoPlay playsInline style={{ width: '100%', height: '100%' }} />
                         ) : (
                             <img src={capturedImage} alt="Captured" style={{ maxWidth: '100%', maxHeight: '100%' }} />
                         )}
@@ -141,6 +143,7 @@ function Photo() {
                 </div>
                 <div className="capture_button">
                     <button
+                        style={{height:"40px", opacity:"0.9", borderRadius:"0px"}}
                         className="btn btn-success btn-block mt-3"
                         onClick={capturedImage ? handleContinue : handleCapture}
                     >

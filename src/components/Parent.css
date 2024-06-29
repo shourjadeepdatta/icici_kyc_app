@@ -114,8 +114,9 @@
 
 
 .capture_image_container {
-    height: 300px;
-    margin: 10px;
+    height: 100%;
+    margin-left: 10px;
+    margin-right: 10px;
     background-color:rgb(230, 226, 226);
 }
 
