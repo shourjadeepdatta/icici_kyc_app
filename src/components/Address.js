@@ -12,6 +12,7 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 function Address() {
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
+  
 
   // State variables
   const [isFileSelected, setIsFileSelected] = useState(false);
@@ -19,29 +20,33 @@ function Address() {
   const [correspondenceOption, setCorrespondenceOption] = useState("");
   const [uploadFileOption, setUploadFileOption] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
-  const [formData, setFormData] = useState({
-    // Initial form data fetched from localStorage
-    selectedOption: "",
-    correspondenceOption: "",
-    uploadFileOption: "",
-    selectedFile: null,
-  });
+  const [formData, setFormData] = useState({});
 
-  const user_data = JSON.parse(localStorage.getItem("user_pan_data"));
-
+  const user_data = JSON.parse(localStorage.getItem("updated_user_pan_data"));
+  const updated_user_data = {...user_data};
+  console.log("updated_user_data->>>",updated_user_data);
   // Effect to load form data from localStorage on component mount
   useEffect(() => {
-    setFormData({
-      selectedOption: user_data?.selectedOption ?? "",
-      correspondenceOption: user_data?.correspondenceOption ?? "",
-      uploadFileOption: user_data?.uploadFileOption ?? "",
-      selectedFile: user_data?.selectedFile ?? null,
-    });
+    // setFormData({
+    //   selectedOption: user_data?.selectedOption ?? "",
+    //   correspondenceOption: user_data?.correspondenceOption ?? "",
+    //   uploadFileOption: user_data?.uploadFileOption ?? "",
+    //   selectedFile: user_data?.selectedFile ?? null,
+    // });
+    console.log("form data is->>",formData);
+
+  }, [formData]);
+
+  useEffect(() => {
+    
+    setFormData(updated_user_data);
   }, []);
 
   // Function to update formData state and localStorage on form field change
   const handleInputChange = (event) => {
+    event.preventDefault();
     const { name, value } = event.target;
+    console.log("event->>",event.target.value,event.target.name);
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
@@ -50,6 +55,7 @@ function Address() {
 
   const moveToNextPage = () => {
     console.log("going to take photo now");
+    setFormData()
     // Save updated data to localStorage under a new key
     localStorage.setItem("updated_form_data", JSON.stringify(formData));
     navigate("/takePhoto");
@@ -129,7 +135,7 @@ function Address() {
 
         {formData.correspondenceOption === "Address as per KRA" && (
           <div>
-            <PersonalForm
+            {/* <PersonalForm
               firstTitle="Address line 1"
               secondTitle="Address line 2"
               value1={user_data?.APP_COR_ADD1 ?? ""}
@@ -140,7 +146,45 @@ function Address() {
               secondTitle="State"
               value1={user_data?.APP_COR_CITY ?? ""}
               value2={user_data?.APP_COR_STATE ?? ""}
-            ></PersonalForm>
+            ></PersonalForm> */}
+
+            <div>
+                <div className="form_container_v2">
+                <div className="mobile_container">
+                    <div className="form-group">
+                        <label htmlFor="email">Address Line 1</label>
+                        <input name="APP_COR_ADD1" onChange={handleInputChange} type="text" className="form-control input_style" id="pan" defaultValue={updated_user_data?.APP_COR_ADD1 ?? "NA"} />
+                    </div>
+                </div>
+
+                <div className="email_container">
+                    <div className="form-group">
+                        <label htmlFor="email">Address Line 2</label>
+                        <input name="APP_COR_ADD2" onChange={handleInputChange} type="text" className="form-control input_style" id="pan" defaultValue={updated_user_data?.APP_COR_ADD2 ?? "NA"} />
+                    </div>
+                </div>
+            </div>
+            </div>
+
+            <div>
+                <div className="form_container_v2">
+                <div className="mobile_container">
+                    <div className="form-group">
+                        <label htmlFor="email">City</label>
+                        <input name="APP_COR_CITY" onChange={handleInputChange} type="text" className="form-control input_style" id="pan" defaultValue={updated_user_data?.APP_COR_CITY ?? "NA"} />
+                    </div>
+                </div>
+
+                <div className="email_container">
+                    <div className="form-group">
+                        <label htmlFor="email">State</label>
+                        <input name="APP_COR_STATE" onChange={handleInputChange} type="text" className="form-control input_style" id="pan" defaultValue={updated_user_data?.APP_COR_STATE ?? "NA"} />
+                    </div>
+                </div>
+            </div>
+            </div>
+
+
             <div style={{margin:"0px", paddingTop:"10px"}} className="pincode_container">
               <div className="form-group">
                 <label htmlFor="pincode">Pincode</label>
@@ -194,6 +238,7 @@ function Address() {
                   Format should be JPG/PDF and size not exceeding 500KB.
                 </div>
                 <input
+                  name="uploadedFile"
                   type="file"
                   className="upload_input"
                   ref={fileInputRef}

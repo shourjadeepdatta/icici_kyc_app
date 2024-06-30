@@ -4,6 +4,8 @@ import { useState } from "react";
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 function Button (props) {
+    
+
     const [isLoading, setIsLoading] = useState(false);
     let navigate = useNavigate();
     const navigateToPage = () => {
@@ -42,6 +44,7 @@ function Button (props) {
             
             if(response.status === 200){
                 localStorage.setItem("user_pan_data",data);
+                localStorage.setItem("updated_user_pan_data",data);
                 navigate("/personalDetails");
             }
           } catch (error) {
@@ -53,7 +56,7 @@ function Button (props) {
     return (
         <div>
             <div className="digi_button">
-                <button onClick={hitPanVerify} style={{height:"50px", opacity:"0.9", borderRadius:"0px"}} type="submit" className="btn btn-success btn-block mt-3">{isLoading ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> : "Confirm"}</button>
+                <button disabled={props.disabled} onClick={hitPanVerify} style={{height:"50px",opacity:"0.9", borderRadius:"0px"}} type="submit" className="btn btn-success btn-block mt-3">{isLoading ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> : "Confirm"}</button>
             </div>
         </div>
     );
