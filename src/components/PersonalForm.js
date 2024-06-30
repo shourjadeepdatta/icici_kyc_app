@@ -9,7 +9,7 @@ function PersonalForm(props) {
                 <div className="mobile_container">
                     <div className="form-group">
                         <label htmlFor="email">{props.firstTitle}</label>
-                        <input type="text" className="form-control input_style" id="pan" defaultValue={props.value1} />
+                        <input type="text" className="form-control input_style" id="pan" defaultValue={"+91 "+props.value1} />
                     </div>
                 </div>
 

@@ -5,7 +5,7 @@ import { useEffect,useState } from "react";
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 function Details() {
-    const userData = JSON.parse(localStorage.getItem("user_pan_data"));
+    const userData = JSON.parse(localStorage.getItem("updated_form_data"));
     console.log("user_data inside details component",userData);
     const [profilePhoto, setProfilePhoto] = useState(null);
 

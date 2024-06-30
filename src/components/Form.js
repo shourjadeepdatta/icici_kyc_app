@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function Form({ data , setIsPanValidFun}) {
+function Form({ data , setIsPanValidFun,externalError,panUpdater}) {
   const [pan, setPan] = useState(data?.panNo || "");
   const [error, setError] = useState("");
   // const [isPanInvalid, setIsPanValid] = useState(true);
@@ -10,6 +10,7 @@ function Form({ data , setIsPanValidFun}) {
   const handlePanChange = (e) => {
     const value = e.target.value;
     setPan(value);
+    panUpdater(value);
 
     if (!panRegex.test(value)) {
       setIsPanValidFun(false);
@@ -46,7 +47,8 @@ function Form({ data , setIsPanValidFun}) {
               value={pan}
               onChange={handlePanChange}
             />
-            {error && <span style={{ color: "red", fontSize: "12px" }}>{error}</span>}
+            {(error || error.length > 0) && <span style={{ color: "red", fontSize: "12px" }}>{error}</span>}
+            {(externalError || externalError.length > 0) && <span style={{ color: "red", fontSize: "12px" }}>{externalError}</span>}
           </div>
         </div>
 

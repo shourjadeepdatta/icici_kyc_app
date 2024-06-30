@@ -21,6 +21,7 @@ function Address() {
   const [uploadFileOption, setUploadFileOption] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [formData, setFormData] = useState({});
+  const [updatedFormData, setUpdatedFormData] = useState({});
 
   const user_data = JSON.parse(localStorage.getItem("updated_user_pan_data"));
   const updated_user_data = {...user_data};
@@ -40,6 +41,7 @@ function Address() {
   useEffect(() => {
     
     setFormData(updated_user_data);
+    setUpdatedFormData(updated_user_data);
   }, []);
 
   // Function to update formData state and localStorage on form field change
@@ -47,7 +49,7 @@ function Address() {
     event.preventDefault();
     const { name, value } = event.target;
     console.log("event->>",event.target.value,event.target.name);
-    setFormData((prevFormData) => ({
+    setUpdatedFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
     }));
@@ -55,9 +57,9 @@ function Address() {
 
   const moveToNextPage = () => {
     console.log("going to take photo now");
-    setFormData()
+    // setFormData()
     // Save updated data to localStorage under a new key
-    localStorage.setItem("updated_form_data", JSON.stringify(formData));
+    localStorage.setItem("updated_form_data", JSON.stringify(updatedFormData));
     navigate("/takePhoto");
   };
 
@@ -100,7 +102,7 @@ function Address() {
         <select
           style={{height:"35px"}}
           name="selectedOption"
-          value={formData.selectedOption}
+          value={updatedFormData.selectedOption}
           className="select_bar input_style"
           onChange={handleInputChange}
         >
@@ -108,7 +110,7 @@ function Address() {
           <option>Address as per Aadhar</option>
         </select>
 
-        {formData.selectedOption === "Address as per Aadhar" && (
+        {updatedFormData.selectedOption === "Address as per Aadhar" && (
           <div className="display_address_container">
             <label style={{opacity:"0.8"}} className="display_address">
               {user_data?.APP_PER_ADD1}, {user_data?.APP_PER_STATE},{" "}
@@ -125,7 +127,7 @@ function Address() {
         <select
           style={{height:"35px"}}
           name="correspondenceOption"
-          value={formData.correspondenceOption}
+          value={updatedFormData.correspondenceOption}
           className="select_bar input_style"
           onChange={handleInputChange}
         >
@@ -133,7 +135,7 @@ function Address() {
           <option>Address as per KRA</option>
         </select>
 
-        {formData.correspondenceOption === "Address as per KRA" && (
+        {updatedFormData.correspondenceOption === "Address as per KRA" && (
           <div>
             {/* <PersonalForm
               firstTitle="Address line 1"
@@ -206,7 +208,7 @@ function Address() {
             </div>
             <select
               name="uploadFileOption"
-              value={formData.uploadFileOption}
+              value={updatedFormData.uploadFileOption}
               className="select_bar input_style"
               onChange={handleInputChange}
             >

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
 import './Parent.css'; // Make sure the path to your CSS file is correct
@@ -6,31 +6,42 @@ import Navbar from './Navbar';
 import Form from './Form';
 import Button from './Button';
 import Header from './Header';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 function Parent() {
-  
-  const [isPanValid, setIsPanValid] = useState(true);
-  //TODO :
-  // Retrieve the PAN received from Stage 1 data from localStorage
-  // localStorage.getItem("PAN", "BAMPM9343K")
-  let [pan, setPan] = useState("BAMPM9343K")
-  console.log("initializing setpanvalid");
-  console.log("isPanValid value",isPanValid);
-  return (
-    <div>
-      <Navbar></Navbar>
+    const [isPanValid, setIsPanValid] = useState(true);
+    const [stageOneData, setStageOneData] = useState({ "panNo": "GEXPD8653H" });
+    const [updatedPan, setUpdatedPan] = useState(true);
+    const [errorMessage, setErrorMessage] = useState('');
 
-      <div className="container">
-        <Header title="KYC Modification"></Header>
-        {/* <h2 className="mt-4">KYC Modification</h2> */}
-        <p>Confirm your PAN below to fetch your details.</p>
+    const handlePanVerificationError = (error) => {
+        console.log("error",error);
+        setErrorMessage(error);
+    };
 
-        <Form data={{"panNo": pan}} setIsPanValidFun={setIsPanValid}></Form>
-        <Button disabled={!isPanValid || false} pan={pan}></Button>
-      </div>
-    </div>
-  );
+    const panUpdater = (pan) => {
+      setUpdatedPan(pan);
+    }
+    useEffect(() => {
+      console.log("error in use effect",errorMessage);
+    },[errorMessage]);
+    return (
+        <div>
+            <Navbar />
+            <div className="container">
+                <Header title="KYC Modification" />
+                <p>Confirm your PAN below to fetch your details.</p>
+                
+                <Form externalError={errorMessage} panUpdater={panUpdater} data={stageOneData} setIsPanValidFun={setIsPanValid} />
+                {/* {(errorMessage && errorMessage.length > 0) && <div className="alert alert-danger mt-3">{errorMessage}</div>} */}
+                <Button
+                    disabled={!isPanValid || false}
+                    pan={updatedPan}
+                    onError={handlePanVerificationError}
+                />
+                
+            </div>
+        </div>
+    );
 }
 
 export default Parent;
