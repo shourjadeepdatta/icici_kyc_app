@@ -5,7 +5,7 @@ function Header(props) {
     return (
         <div>
             <div className="header_dialogue">
-                <h3>{props.title}</h3>
+                <h1>{props.title}</h1>
             </div>
         </div>
     );

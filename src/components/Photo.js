@@ -126,7 +126,8 @@ function Photo() {
                                 backgroundColor: 'transparent',
                                 border: 'none',
                                 fontWeight: 'bold',
-                                cursor: 'pointer'
+                                cursor: 'pointer',
+                                paddingBottom:"20px"
                             }}
                         >
                            Reset Photo

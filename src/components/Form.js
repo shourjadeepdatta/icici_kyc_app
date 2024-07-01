@@ -36,7 +36,7 @@ function Form({ data , setIsPanValidFun,externalError,panUpdater}) {
       <form className="form_container" onSubmit={handleSubmit}>
         <div className="pan_container">
           <div className="form-group">
-            <label style={{ fontSize: "13px" }} htmlFor="pan">
+            <label style={{ fontSize: "13px",paddingBottom:"4px" }} htmlFor="pan">
               PAN
             </label>
             <input

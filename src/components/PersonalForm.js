@@ -6,16 +6,16 @@ function PersonalForm(props) {
         <div>
             <div>
                 <form className="form_container_v2">
-                <div className="mobile_container">
+                <div style={{marginTop:"20px"}} className="mobile_container">
                     <div className="form-group">
-                        <label htmlFor="email">{props.firstTitle}</label>
+                        <label style={{paddingBottom:"4px"}}htmlFor="email">{props.firstTitle}</label>
                         <input type="text" className="form-control input_style" id="pan" defaultValue={"+91 "+props.value1} />
                     </div>
                 </div>
 
-                <div className="email_container">
+                <div style={{marginBottom:"30px"}} className="email_container">
                     <div className="form-group">
-                        <label htmlFor="email">{props.secondTitle}</label>
+                        <label style={{paddingBottom:"4px"}}htmlFor="email">{props.secondTitle}</label>
                         <input type="text" className="form-control input_style" id="pan" defaultValue={props.value2} />
                     </div>
                 </div>

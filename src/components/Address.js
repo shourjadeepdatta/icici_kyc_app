@@ -96,7 +96,7 @@ function Address() {
         <Header title="Address details" />
       </div>
       <div className="dropdown_container">
-        <div className="dropdown_title">
+        <div style={{width:"100%",marginTop:"20px",paddingRight:"20px"}}className="dropdown_title">
           <label className="permanent_address_label">Permanent Address</label>
         </div>
         <select
@@ -111,7 +111,7 @@ function Address() {
         </select>
 
         {updatedFormData.selectedOption === "Address as per Aadhar" && (
-          <div className="display_address_container">
+          <div style={{width:"100%"}} className="display_address_container">
             <label style={{opacity:"0.8"}} className="display_address">
               {user_data?.APP_PER_ADD1}, {user_data?.APP_PER_STATE},{" "}
               {user_data?.APP_PER_CITY}, {user_data?.APP_PER_PINCD}
@@ -153,7 +153,7 @@ function Address() {
             <div>
                 <div className="form_container_v2">
                 <div className="mobile_container">
-                    <div className="form-group">
+                    <div style={{paddingTop:"10px", paddingRight:"5px"}} className="form-group">
                         <label htmlFor="email">Address Line 1</label>
                         <input name="APP_COR_ADD1" onChange={handleInputChange} type="text" className="form-control input_style" id="pan" defaultValue={updated_user_data?.APP_COR_ADD1 ?? "NA"} />
                     </div>
@@ -171,7 +171,7 @@ function Address() {
             <div>
                 <div className="form_container_v2">
                 <div className="mobile_container">
-                    <div className="form-group">
+                    <div style={{marginTop:"10px"}} className="form-group">
                         <label htmlFor="email">City</label>
                         <input name="APP_COR_CITY" onChange={handleInputChange} type="text" className="form-control input_style" id="pan" defaultValue={updated_user_data?.APP_COR_CITY ?? "NA"} />
                     </div>
@@ -207,6 +207,7 @@ function Address() {
               </label>
             </div>
             <select
+              style={{width:"98%"}}
               name="uploadFileOption"
               value={updatedFormData.uploadFileOption}
               className="select_bar input_style"

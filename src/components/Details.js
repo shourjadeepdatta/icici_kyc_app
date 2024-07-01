@@ -23,9 +23,9 @@ function Details() {
             <div className="container">
                 <Header title="Final review"></Header>
             </div>
-            <label className="detail_filler">One last step before we finish your KYC process.</label>
+            <label style={{paddingLeft:"10px", paddingRight:"10px"}} className="detail_filler">One last step before we finish your KYC process.</label>
             <hr />
-        <div className="details-container">    
+        <div style={{paddingLeft:"10px", paddingRight:"10px"}} className="details-container">    
         <div className="detail_filler">
             <div className="pan_name_img_continer_combo">
                 <div className="pan_and_name_container">

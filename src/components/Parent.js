@@ -9,7 +9,7 @@ import Header from './Header';
 
 function Parent() {
     const [isPanValid, setIsPanValid] = useState(true);
-    const [stageOneData, setStageOneData] = useState({ "panNo": "GEXPD8653H" });
+    const [stageOneData, setStageOneData] = useState({ "panNo": "BAMPM9343K" });
     const [updatedPan, setUpdatedPan] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');
 
@@ -29,7 +29,9 @@ function Parent() {
             <Navbar />
             <div className="container">
                 <Header title="KYC Modification" />
-                <p>Confirm your PAN below to fetch your details.</p>
+                <div className='confirmation_container'>
+                    <p>Confirm your PAN below to fetch your details.</p>
+                </div>
                 
                 <Form externalError={errorMessage} panUpdater={panUpdater} data={stageOneData} setIsPanValidFun={setIsPanValid} />
                 {/* {(errorMessage && errorMessage.length > 0) && <div className="alert alert-danger mt-3">{errorMessage}</div>} */}
