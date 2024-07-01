@@ -106,7 +106,7 @@ function Photo() {
                     </div>
                 )}
                 <div className="capture_image_container_wrapper" style={{ position: 'relative' }}>
-                    <div className="capture_image_container">
+                    <div style={{marginTop:"20px"}} className="capture_image_container">
                         {isShutterVisible && <div className="shutter"></div>}
                         {isVideoVisible ? (
                             <video ref={videoRef} autoPlay playsInline style={{ width: '100%', height: '100%' }} />
@@ -116,22 +116,23 @@ function Photo() {
                         <canvas ref={canvasRef} style={{ display: 'none' }} />
                     </div>
                     {!isVideoVisible && (
-                        <button
-                            onClick={resetCapture}
-                            style={{
-                                position: 'absolute',
-                                top: '-20px',
-                                right: '10px',
-                                color: 'red',
-                                backgroundColor: 'transparent',
-                                border: 'none',
-                                fontWeight: 'bold',
-                                cursor: 'pointer',
-                                paddingBottom:"20px"
-                            }}
-                        >
-                           Reset Photo
-                        </button>
+                        <div style={{paddingBottom:"20px"}}>
+                            <button
+                                onClick={resetCapture}
+                                style={{
+                                    position: 'absolute',
+                                    top: '-20px',
+                                    right: '10px',
+                                    color: 'red',
+                                    backgroundColor: 'transparent',
+                                    border: 'none',
+                                    fontWeight: 'bold',
+                                    cursor: 'pointer',
+                                }}
+                            >
+                            Reset Photo
+                            </button>
+                        </div>
                     )}
                 </div>
                 <div className="instruction_container">

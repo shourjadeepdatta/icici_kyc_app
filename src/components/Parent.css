@@ -386,3 +386,29 @@
     padding-top: 15px;
     padding-bottom: 15px;
 }
+
+
+.input_wrapper {
+    position: relative;
+}
+
+.input_wrapper input {
+    width: 100%;
+    padding-right: 30px; /* Add some padding to the right to make space for the icon */
+}
+
+.edit_icon {
+    height: 20px;
+    width: 20px;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.error_message {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}
