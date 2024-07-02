@@ -10,7 +10,7 @@ import Header from './Header';
 function Parent() {
     const [isPanValid, setIsPanValid] = useState(true);
     const [stageOneData, setStageOneData] = useState({ "panNo": "BAMPM9343K" });
-    const [updatedPan, setUpdatedPan] = useState(true);
+    const [updatedPan, setUpdatedPan] = useState("BAMPM9343K");
     const [errorMessage, setErrorMessage] = useState('');
 
     const handlePanVerificationError = (error) => {

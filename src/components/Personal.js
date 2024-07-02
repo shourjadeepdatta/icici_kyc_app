@@ -8,7 +8,15 @@ import Header from "./Header";
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 function Personal() {
-    const panResult = JSON.parse(localStorage.getItem("updated_form_data"));
+    let user_form_data = {}
+    let panResult = {}
+    user_form_data = JSON.parse(localStorage.getItem("updated_form_data"));
+    if(user_form_data){
+        panResult = JSON.parse(localStorage.getItem("updated_form_data"));
+    }
+    else{
+        panResult = JSON.parse(localStorage.getItem("updated_user_pan_data"));
+    }
     console.log("slkdmsldmd-.>>",panResult);
     return (
         <div>

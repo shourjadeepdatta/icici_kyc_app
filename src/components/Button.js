@@ -31,6 +31,7 @@ function Button(props) {
             const response = await fetch("http://localhost:5000/ekyc_verify", requestOptions);
             const data = await response.text();
             console.log("res->>",response.status);
+            console.log("response->>>",data);
 
             if (response.status === 200) {
                 localStorage.setItem("user_pan_data", data);

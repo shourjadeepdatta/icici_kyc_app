@@ -1,13 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import ReturnButton from "./ReturnButton";
+// import ReturnButton from "./ReturnButton";
 import Navbar from "./Navbar";
 import Header from "./Header";
-import PersonalForm from "./PersonalForm";
-import Button from "./Button";
+// import PersonalForm from "./PersonalForm";
+// import Button from "./Button";
 import { ReactComponent as UploadIcon } from "../assets/images/upload-cloud-svgrepo-com.svg";
 import { ReactComponent as DeleteIcon } from "../assets/images/delete-svgrepo-com.svg";
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
+// import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 function Address() {
   const fileInputRef = useRef(null);
@@ -16,14 +16,19 @@ function Address() {
 
   // State variables
   const [isFileSelected, setIsFileSelected] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("");
-  const [correspondenceOption, setCorrespondenceOption] = useState("");
-  const [uploadFileOption, setUploadFileOption] = useState("");
+  // const [selectedOption, setSelectedOption] = useState("");
+  // const [correspondenceOption, setCorrespondenceOption] = useState("");
+  // const [uploadFileOption, setUploadFileOption] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [formData, setFormData] = useState({});
   const [updatedFormData, setUpdatedFormData] = useState({});
+  const [isPermanentAadhaarAddress, setIsPermanentAadhaarAddress] = useState(false);
+  const [permanentAddressValue, setPermanentAddressValue] = useState("");
+  const [correspondenceAddressValue, setCorrespondenceAddressValue] = useState("");
+  // const [isPermanentKraAddress, setIsPermanentKraAddress] = useState(false);
 
-  const user_data = JSON.parse(localStorage.getItem("updated_user_pan_data"));
+  // const user_data = JSON.parse(localStorage.getItem("updated_user_pan_data"));
+  const user_data = JSON.parse(localStorage.getItem("updated_form_data"));
   const updated_user_data = {...user_data};
   console.log("updated_user_data->>>",updated_user_data);
   // Effect to load form data from localStorage on component mount
@@ -44,6 +49,10 @@ function Address() {
     setUpdatedFormData(updated_user_data);
   }, []);
 
+  useEffect(()=> {
+    console.log("correspondence address option change",correspondenceAddressValue);
+  },[correspondenceAddressValue])
+
   // Function to update formData state and localStorage on form field change
   const handleInputChange = (event) => {
     event.preventDefault();
@@ -53,6 +62,34 @@ function Address() {
       ...prevFormData,
       [name]: value,
     }));
+  };
+
+  const handlePerAddressInputChange = (event) => {
+    event.preventDefault();
+    setPermanentAddressValue(event.target.value);
+    // if(event.target.value === "Address as per KRA"){
+    //   setIsPermanentAadhaarAddress(false);
+    // }
+    // const { name, value } = event.target;
+    // console.log("event->>",event.target.value,event.target.name);
+    // setUpdatedFormData((prevFormData) => ({
+    //   ...prevFormData,
+    //   [name]: value,
+    // }));
+  };
+
+  const handleCorAddressInputChange = (event) => {
+    event.preventDefault();
+    setCorrespondenceAddressValue(event.target.value);
+    // if(event.target.value === "Address as per KRA"){
+    //   setIsPermanentAadhaarAddress(false);
+    // }
+    // const { name, value } = event.target;
+    // console.log("event->>",event.target.value,event.target.name);
+    // setUpdatedFormData((prevFormData) => ({
+    //   ...prevFormData,
+    //   [name]: value,
+    // }));
   };
 
   const moveToNextPage = () => {
@@ -89,6 +126,8 @@ function Address() {
     }));
   };
 
+  
+
   return (
     <div>
       <Navbar />
@@ -102,23 +141,41 @@ function Address() {
         <select
           style={{height:"35px"}}
           name="selectedOption"
-          value={updatedFormData.selectedOption}
+          value={permanentAddressValue}
           className="select_bar input_style"
-          onChange={handleInputChange}
+          onChange={handlePerAddressInputChange}
         >
           <option>Select an option</option>
-          <option>Address as per Aadhar</option>
+          <option>Address as per Aadhaar</option>
+          <option>Address as per KRA</option>
         </select>
 
-        {updatedFormData.selectedOption === "Address as per Aadhar" && (
+        {/* {permanentAddressValue === "Address as per Aadhaar" ? (
           <div style={{width:"100%"}} className="display_address_container">
             <label style={{opacity:"0.8"}} className="display_address">
               {user_data?.APP_PER_ADD1}, {user_data?.APP_PER_STATE},{" "}
               {user_data?.APP_PER_CITY}, {user_data?.APP_PER_PINCD}
             </label>
           </div>
-        )}
+        ) : permanentAddressValue === "Address as per KRA" ? (
+          <div style={{width:"100%"}} className="display_address_container">
+            <label style={{opacity:"0.8"}} className="display_address">
+              {user_data?.APP_COR_ADD1}, {user_data?.APP_COR_STATE},{" "}
+              {user_data?.APP_COR_CITY}, {user_data?.APP_COR_PINCD}
+            </label>
+          </div>
+        )} */}
+        {permanentAddressValue === "Address as per Aadhaar" ? (
+        <label style={{ opacity: "0.8" }} className="display_address">
+          {user_data?.APP_PER_ADD1}, {user_data?.APP_PER_STATE}, {user_data?.APP_PER_CITY}, {user_data?.APP_PER_PINCD}
+        </label>
+      ) : permanentAddressValue === "Address as per KRA" ? (
+        <label style={{ opacity: "0.8" }} className="display_address">
+          {user_data?.APP_COR_ADD1}, {user_data?.APP_COR_STATE}, {user_data?.APP_COR_CITY}, {user_data?.APP_COR_PINCD}
+        </label>
+      ) : null}
 
+        
         <div className="dropdown_title">
           <label className="correspondence_address_label">
             Correspondence Address
@@ -127,99 +184,311 @@ function Address() {
         <select
           style={{height:"35px"}}
           name="correspondenceOption"
-          value={updatedFormData.correspondenceOption}
+          value={correspondenceAddressValue}
           className="select_bar input_style"
-          onChange={handleInputChange}
+          onChange={handleCorAddressInputChange}
         >
           <option>Select an option</option>
+          <option>Address as per Aadhaar</option>
           <option>Address as per KRA</option>
+          <option>New Address</option>
         </select>
 
-        {updatedFormData.correspondenceOption === "Address as per KRA" && (
+      {correspondenceAddressValue === "Address as per KRA" && (
+        <div>
           <div>
-            {/* <PersonalForm
-              firstTitle="Address line 1"
-              secondTitle="Address line 2"
-              value1={user_data?.APP_COR_ADD1 ?? ""}
-              value2={user_data?.APP_COR_ADD2 ?? ""}
-            ></PersonalForm>
-            <PersonalForm
-              firstTitle="City"
-              secondTitle="State"
-              value1={user_data?.APP_COR_CITY ?? ""}
-              value2={user_data?.APP_COR_STATE ?? ""}
-            ></PersonalForm> */}
-
-            <div>
-                <div className="form_container_v2">
-                <div className="mobile_container">
-                    <div style={{paddingTop:"10px", paddingRight:"5px"}} className="form-group">
-                        <label htmlFor="email">Address Line 1</label>
-                        <input name="APP_COR_ADD1" onChange={handleInputChange} type="text" className="form-control input_style" id="pan" defaultValue={updated_user_data?.APP_COR_ADD1 ?? "NA"} />
-                    </div>
+            <div className="form_container_v2">
+              <div className="mobile_container">
+                <div style={{ paddingTop: "10px", paddingRight: "5px" }} className="form-group">
+                  <label htmlFor="email">Address Line 1</label>
+                  <input
+                    name="APP_COR_ADD1"
+                    onChange={handleInputChange}
+                    type="text"
+                    className="form-control input_style"
+                    id="pan"
+                    disabled={true}
+                    defaultValue={updated_user_data?.APP_COR_ADD1 ?? "NA"}
+                  />
                 </div>
+              </div>
 
-                <div className="email_container">
-                    <div className="form-group">
-                        <label htmlFor="email">Address Line 2</label>
-                        <input name="APP_COR_ADD2" onChange={handleInputChange} type="text" className="form-control input_style" id="pan" defaultValue={updated_user_data?.APP_COR_ADD2 ?? "NA"} />
-                    </div>
+              <div className="email_container">
+                <div className="form-group">
+                  <label htmlFor="email">Address Line 2</label>
+                  <input
+                    name="APP_COR_ADD2"
+                    onChange={handleInputChange}
+                    type="text"
+                    className="form-control input_style"
+                    id="pan"
+                    disabled={true}
+                    defaultValue={updated_user_data?.APP_COR_ADD2 ?? "NA"}
+                  />
                 </div>
-            </div>
-            </div>
-
-            <div>
-                <div className="form_container_v2">
-                <div className="mobile_container">
-                    <div style={{marginTop:"10px"}} className="form-group">
-                        <label htmlFor="email">City</label>
-                        <input name="APP_COR_CITY" onChange={handleInputChange} type="text" className="form-control input_style" id="pan" defaultValue={updated_user_data?.APP_COR_CITY ?? "NA"} />
-                    </div>
-                </div>
-
-                <div className="email_container">
-                    <div className="form-group">
-                        <label htmlFor="email">State</label>
-                        <input name="APP_COR_STATE" onChange={handleInputChange} type="text" className="form-control input_style" id="pan" defaultValue={updated_user_data?.APP_COR_STATE ?? "NA"} />
-                    </div>
-                </div>
-            </div>
-            </div>
-
-
-            <div style={{margin:"0px", paddingTop:"10px"}} className="pincode_container">
-              <div className="form-group">
-                <label htmlFor="pincode">Pincode</label>
-                <input
-                  type="text"
-                  className="form-control input_style"
-                  id="pincode"
-                  name="APP_COR_PINCD"
-                  defaultValue={user_data?.APP_COR_PINCD ?? ""}
-                  onChange={handleInputChange}
-                />
               </div>
             </div>
+          </div>
 
-            <div className="dropdown_title">
-              <label className="address_prood_label">
-                Choose the address proof below
-              </label>
+          <div>
+            <div className="form_container_v2">
+              <div className="mobile_container">
+                <div style={{ marginTop: "10px" }} className="form-group">
+                  <label htmlFor="email">City</label>
+                  <input
+                    name="APP_COR_CITY"
+                    onChange={handleInputChange}
+                    type="text"
+                    className="form-control input_style"
+                    id="pan"
+                    disabled={true}
+                    defaultValue={updated_user_data?.APP_COR_CITY ?? "NA"}
+                  />
+                </div>
+              </div>
+
+              <div className="email_container">
+                <div className="form-group">
+                  <label htmlFor="email">State</label>
+                  <input
+                    name="APP_COR_STATE"
+                    onChange={handleInputChange}
+                    type="text"
+                    className="form-control input_style"
+                    id="pan"
+                    disabled={true}
+                    defaultValue={updated_user_data?.APP_COR_STATE ?? "NA"}
+                  />
+                </div>
+              </div>
             </div>
-            <select
-              style={{width:"98%"}}
-              name="uploadFileOption"
-              value={updatedFormData.uploadFileOption}
-              className="select_bar input_style"
-              onChange={handleInputChange}
-            >
-              <option>Select an option</option>
-              <option>Gas receipt</option>
-              <option>Electricity Bill</option>
-              <option>Aadhaar Card</option>
-            </select>
+          </div>
 
-            {isFileSelected ? (
+          <div style={{ margin: "0px", paddingTop: "10px" }} className="pincode_container">
+            <div className="form-group">
+              <label htmlFor="pincode">Pincode</label>
+              <input
+                type="text"
+                className="form-control input_style"
+                id="pincode"
+                name="APP_COR_PINCD"
+                disabled={true}
+                defaultValue={user_data?.APP_COR_PINCD ?? ""}
+                onChange={handleInputChange}
+              />
+            </div>
+          </div>
+
+          {/* <div className="dropdown_title">
+            <label className="address_prood_label">Choose the address proof below</label>
+          </div>
+          <select
+            style={{ width: "98%" }}
+            name="uploadFileOption"
+            value={updatedFormData.uploadFileOption}
+            className="select_bar input_style"
+            onChange={handleInputChange}
+          >
+            <option>Select an option</option>
+            <option>Gas receipt</option>
+            <option>Electricity Bill</option>
+            <option>Aadhaar Card</option>
+          </select> */}
+        </div>
+      )}
+      {correspondenceAddressValue === "Address as per Aadhaar" && (
+        <div>
+          <div>
+            <div className="form_container_v2">
+              <div className="mobile_container">
+                <div style={{ paddingTop: "10px", paddingRight: "5px" }} className="form-group">
+                  <label htmlFor="email">Address Line 1</label>
+                  <input
+                    name="APP_COR_ADD1"
+                    onChange={handleInputChange}
+                    type="text"
+                    className="form-control input_style"
+                    id="pan"
+                    disabled={true}
+                    defaultValue={user_data?.APP_PER_ADD1 ?? "NA"}
+                  />
+                </div>
+              </div>
+
+              <div className="email_container">
+                <div className="form-group">
+                  <label htmlFor="email">Address Line 2</label>
+                  <input
+                    name="APP_COR_ADD2"
+                    onChange={handleInputChange}
+                    type="text"
+                    className="form-control input_style"
+                    id="pan"
+                    disabled={true}
+                    defaultValue={user_data?.APP_PER_ADD2 ?? "NA"}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div className="form_container_v2">
+              <div className="mobile_container">
+                <div style={{ marginTop: "10px" }} className="form-group">
+                  <label htmlFor="email">City</label>
+                  <input
+                    name="APP_COR_CITY"
+                    onChange={handleInputChange}
+                    type="text"
+                    className="form-control input_style"
+                    id="pan"
+                    disabled={true}
+                    defaultValue={user_data?.APP_PER_CITY ?? "NA"}
+                  />
+                </div>
+              </div>
+
+              <div className="email_container">
+                <div className="form-group">
+                  <label htmlFor="email">State</label>
+                  <input
+                    name="APP_COR_STATE"
+                    onChange={handleInputChange}
+                    type="text"
+                    className="form-control input_style"
+                    id="pan"
+                    disabled={true}
+                    defaultValue={user_data?.APP_PER_STATE ?? "NA"}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ margin: "0px", paddingTop: "10px" }} className="pincode_container">
+            <div className="form-group">
+              <label htmlFor="pincode">Pincode</label>
+              <input
+                type="text"
+                className="form-control input_style"
+                id="pincode"
+                name="APP_COR_PINCD"
+                disabled={true}
+                defaultValue={user_data?.APP_PER_PINCD ?? ""}
+                onChange={handleInputChange}
+              />
+            </div>
+          </div>
+
+          {/* <div className="dropdown_title">
+            <label className="address_prood_label">Choose the address proof below</label>
+          </div>
+          <select
+            style={{ width: "98%" }}
+            name="uploadFileOption"
+            value={updatedFormData.uploadFileOption}
+            className="select_bar input_style"
+            onChange={handleInputChange}
+          >
+            <option>Select an option</option>
+            <option>Gas receipt</option>
+            <option>Electricity Bill</option>
+            <option>Aadhaar Card</option>
+          </select> */}
+        </div>
+      )}
+      {correspondenceAddressValue === "New Address" && (
+        <div>
+          <div>
+            <div className="form_container_v2">
+              <div className="mobile_container">
+                <div style={{ paddingTop: "10px", paddingRight: "5px" }} className="form-group">
+                  <label htmlFor="email">Address Line 1</label>
+                  <input
+                    name="APP_COR_ADD1"
+                    onChange={handleInputChange}
+                    type="text"
+                    className="form-control input_style"
+                    id="pan"
+                  />
+                </div>
+              </div>
+
+              <div className="email_container">
+                <div className="form-group">
+                  <label htmlFor="email">Address Line 2</label>
+                  <input
+                    name="APP_NEW_ADD2"
+                    onChange={handleInputChange}
+                    type="text"
+                    className="form-control input_style"
+                    id="pan"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div className="form_container_v2">
+              <div className="mobile_container">
+                <div style={{ marginTop: "10px" }} className="form-group">
+                  <label htmlFor="email">City</label>
+                  <input
+                    name="APP_NEW_CITY"
+                    onChange={handleInputChange}
+                    type="text"
+                    className="form-control input_style"
+                    id="pan"
+                  />
+                </div>
+              </div>
+
+              <div className="email_container">
+                <div className="form-group">
+                  <label htmlFor="email">State</label>
+                  <input
+                    name="APP_NEW_STATE"
+                    onChange={handleInputChange}
+                    type="text"
+                    className="form-control input_style"
+                    id="pan"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ margin: "0px", paddingTop: "10px" }} className="pincode_container">
+            <div className="form-group">
+              <label htmlFor="pincode">Pincode</label>
+              <input
+                type="text"
+                className="form-control input_style"
+                id="pincode"
+                name="APP_NEW_PINCD"
+                onChange={handleInputChange}
+              />
+            </div>
+          </div>
+
+          <div className="dropdown_title">
+            <label className="address_prood_label">Choose the address proof below</label>
+          </div>
+          <select
+            style={{ width: "98%" }}
+            name="uploadFileOption"
+            value={updatedFormData.uploadFileOption}
+            className="select_bar input_style"
+            onChange={handleInputChange}
+          >
+            <option>Select an option</option>
+            <option>Gas receipt</option>
+            <option>Electricity Bill</option>
+            <option>Aadhaar Card</option>
+          </select>
+          {isFileSelected ? (
               <div className="delete_icon_container">
                 <span>{selectedFile?.name ?? ""}</span>
                 <DeleteIcon
@@ -251,8 +520,7 @@ function Address() {
                 />
               </div>
             )}
-          </div>
-        )}
+        </div>)}
 
         {/* <div className="digi_button">
           <Button

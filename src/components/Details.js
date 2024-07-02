@@ -1,13 +1,46 @@
 import React from "react";
 import Navbar from "./Navbar";
 import Header from "./Header";
-import { useEffect,useState } from "react";
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { useEffect,useState,useRef } from "react";
+import { ReactComponent as EditIcon } from "../assets/images/green_edit_icon.svg";
+import Modal from "./Modal";
 
 function Details() {
+
     const userData = JSON.parse(localStorage.getItem("updated_form_data"));
     console.log("user_data inside details component",userData);
     const [profilePhoto, setProfilePhoto] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+    const [forGender,setForGender] = useState(false);
+    const [forMarital,setForMarital] = useState(false);
+    const [maritalStatusValue,setMaritalStatusValue] = useState("");
+    const [genderValue,setGenderValue] = useState("");
+
+
+    const modalRef = useRef();
+
+
+    const openModalForGender = () => {
+        setShowModal(true);
+        setForGender(true);
+        setForMarital(false);
+    };
+
+    const openModalForMaritalStatus = () => {
+        setShowModal(true);
+        setForMarital(true);
+        setForGender(false);
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+    };
+
+    const handleOutsideClick = (event) => {
+        if (modalRef.current && !modalRef.current.contains(event.target)) {
+            closeModal();
+        }
+    };
 
     useEffect(() => {
         // Load the image from localStorage
@@ -15,8 +48,35 @@ function Details() {
         if (savedImage) {
             setProfilePhoto(savedImage);
         }
+        console.log("applicant gender from storage->>",userData?.APP_GEN);
+        setGenderValue(userData?.APP_GEN);
+        console.log("applicant marital status from storage ->>",userData?.APP_MAR_STATUS);
+        setMaritalStatusValue(userData?.APP_MAR_STATUS);
     }, []);
 
+    useEffect(() => {
+        if (showModal) {
+            document.addEventListener('mousedown', handleOutsideClick);
+        } else {
+            document.removeEventListener('mousedown', handleOutsideClick);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleOutsideClick);
+        };
+    }, [showModal]);
+
+    const handleMaritalStatusChange = (e) => {
+        let newMaritalStatus = e.target.value;
+        setMaritalStatusValue(newMaritalStatus);
+        console.log("marital status after selection->>>",e.target.value);
+        console.log("marital status after selection->>>",maritalStatusValue);
+        userData["APP_MAR_STATUS"] = e.target.value;
+        
+        localStorage.setItem("updated_form_data",JSON.stringify(userData));
+    }
+
+    
     return (
         <div>
             <Navbar></Navbar>
@@ -79,7 +139,7 @@ function Details() {
                         <div style={{ opacity: 0.7}}>Gender</div>
                     </div>
                     <div className="col-md-8">
-                        {userData?.APP_GEN ?? "NA"} <i className="fa fa-pencil-alt"></i>
+                        {genderValue} <EditIcon onClick={openModalForGender} className="details_edit_icon"/>
                     </div>
                 </div>
             </div>
@@ -119,8 +179,9 @@ function Details() {
                     <div className="col-md-4 title_texts">
                         <div style={{ opacity: 0.7 }}>marital Status</div>
                         <div className="col-md-8">
-                            Single
+                            {maritalStatusValue} <EditIcon onClick={openModalForMaritalStatus} className="details_edit_icon"/>
                         </div>
+                        
                     </div>
                     
                     <div className="col-md-4 title_texts">
@@ -135,10 +196,67 @@ function Details() {
             </div>
         </div>
         </div>
-        <div className="fixed_div">
+        {(showModal && forGender) && (<div className="option_dropdown_container fixed_div" ref={modalRef}>
+            <Header className="dropdown_header" isSlider={true} title="Select Your Gender"></Header>
+            <div className="button_plus_options_container">
+                <div className="option_container">
+                    <div onClick={()=>{
+                        setGenderValue("Male");
+                        userData["APP_GEN"] = "Male";
+                        localStorage.setItem("updated_form_data",JSON.stringify(userData));
+                    }} className="gender_option">Male</div>
+                    <div onClick={()=>{
+                        setGenderValue("Female");
+                        userData["APP_GEN"] = "Female";
+                        localStorage.setItem("updated_form_data",JSON.stringify(userData));
+                    }} className="gender_option">Female</div>
+                    <div onClick={()=>{
+                        setGenderValue("Other");
+                        userData["APP_GEN"] = "Other";
+                        localStorage.setItem("updated_form_data",JSON.stringify(userData));
+                    }} className="gender_option">Other</div>
+                </div>
+                <div className="button_container">
+                    <button onClick={closeModal} className="btn btn-success btn-block">Confirm</button>
+                </div>
+            </div>      
+        </div>)}
+
+        {(showModal && forMarital) && (
+                <div className="option_dropdown_container fixed_div" ref={modalRef}>
+                <h4 className="dropdown_header_marital">Select Your Marital Status</h4>
+                <div className="button_plus_options_container">
+                    <div className="option_container_marital_status">
+                        <div className="dropdown_title">
+                            <label className="correspondence_address_label">
+                                Marital Status
+                            </label>
+                        </div>
+                        <div className="marital_status_dropdown">
+                            <select
+                            style={{height:"35px"}}
+                            name="maritalStatusOption"
+                            value={maritalStatusValue}
+                            className="select_bar input_style"
+                            onChange={handleMaritalStatusChange}
+                            >
+                                <option>Select Gender</option>
+                                <option>Single</option>
+                                <option>Married</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div className="button_container">
+                        <button onClick={closeModal} className="btn btn-success btn-block">Confirm</button>
+                    </div>
+                </div>      
+            </div>
+        )}
+        {/* <Modal show={showModal} onClose={closeModal} /> */}
+        {!showModal && (<div className="fixed_div">
                 <p>By continuing you agree to CAMS KYC <a href="#">T&C</a> and <a href="#">Privacy Policy</a></p>
                 <button className="btn btn-success btn-block">Looks good! Continue</button>
-        </div>
+        </div>)}
         </div>
     );
 }
