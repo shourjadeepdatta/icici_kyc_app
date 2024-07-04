@@ -9,7 +9,7 @@ function Digilocker() {
         myHeaders.append("Content-Type", "application/json");
 
         const raw = JSON.stringify({
-            "user_id": "XCICL1AFG",
+            "user_id": "GEXPD8653H",
             "phone_number": "8169935304",
             "pan": "GEXPD8653H",
             "callback_url": "http://localhost:3000/addressDetails"
@@ -23,11 +23,27 @@ function Digilocker() {
         };
 
         console.log("hitting the api")
+        localStorage.setItem("Aadhaar_address",JSON.stringify({
+            "co": "S/O: Prasad Joshi",
+            "country": "India",
+            "dist": "Mumbai",
+            "house": "D2, Kalpana Bldg, Girgaum CHS",
+            "loc": "Girgaum",
+            "pc": "400004",
+            "po": "Girgaon",
+            "state": "Maharashtra",
+            "street": "V.P. Road",
+            "subdist": "Mumbai",
+            "vtc": "Mumbai"
+        }));
         try {
             const response = await fetch("https://legacyclients.kyc.getkwikid.com/kyc/cams/digi", requestOptions);
             const digi_response = await response.json();
             console.log(digi_response)
             
+            // const digi_address_response = await fetch("/digi_address.json")
+            // const address_details = await digi_address_response.json();
+            // console.log("digi_address->>",address_details);
             // setResult(data);
             
             if(response.status === 200){

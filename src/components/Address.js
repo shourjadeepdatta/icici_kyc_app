@@ -29,6 +29,7 @@ function Address() {
 
   // const user_data = JSON.parse(localStorage.getItem("updated_user_pan_data"));
   const user_data = JSON.parse(localStorage.getItem("updated_form_data"));
+  const aadhaar_data  = JSON.parse(localStorage.getItem("Aadhaar_address"));
   const updated_user_data = {...user_data};
   console.log("updated_user_data->>>",updated_user_data);
   // Effect to load form data from localStorage on component mount
@@ -66,7 +67,24 @@ function Address() {
 
   const handlePerAddressInputChange = (event) => {
     event.preventDefault();
+    let permanenetAddress = {}
     setPermanentAddressValue(event.target.value);
+    if(event.target.value === "Address as per Aadhaar"){
+      permanenetAddress["APP_PER_ADD1"] = aadhaar_data.house;
+      permanenetAddress["APP_PER_STATE"] = aadhaar_data.state;
+      permanenetAddress["APP_PER_CITY"] = aadhaar_data.subdist;
+      permanenetAddress["APP_PER_PINCD"] = aadhaar_data.pc;
+
+      localStorage.setItem("perAddress",JSON.stringify(permanenetAddress));
+    }
+    else{
+      permanenetAddress["APP_PER_ADD1"] = user_data.APP_PER_ADD1;
+      permanenetAddress["APP_PER_STATE"] = user_data.APP_PER_STATE;
+      permanenetAddress["APP_PER_CITY"] = user_data.APP_PER_CITY;
+      permanenetAddress["APP_PER_PINCD"] = user_data.APP_PER_PINCD;
+
+      localStorage.setItem("perAddress",JSON.stringify(permanenetAddress));
+    }
     // if(event.target.value === "Address as per KRA"){
     //   setIsPermanentAadhaarAddress(false);
     // }
@@ -80,7 +98,24 @@ function Address() {
 
   const handleCorAddressInputChange = (event) => {
     event.preventDefault();
+    let correspondenceAddress = {}
     setCorrespondenceAddressValue(event.target.value);
+    if(event.target.value === "Address as per Aadhaar"){
+      correspondenceAddress["APP_COR_ADD1"] = aadhaar_data.house;
+      correspondenceAddress["APP_COR_STATE"] = aadhaar_data.state;
+      correspondenceAddress["APP_COR_CITY"] = aadhaar_data.subdist;
+      correspondenceAddress["APP_COR_PINCD"] = aadhaar_data.pc;
+
+      localStorage.setItem("corrAddress",JSON.stringify(correspondenceAddress));
+    }
+    else{
+      correspondenceAddress["APP_COR_ADD1"] = user_data.APP_COR_ADD1;
+      correspondenceAddress["APP_COR_STATE"] = user_data.APP_COR_STATE;
+      correspondenceAddress["APP_COR_CITY"] = user_data.APP_COR_CITY;
+      correspondenceAddress["APP_COR_PINCD"] = user_data.APP_COR_PINCD;
+
+      localStorage.setItem("corrAddress",JSON.stringify(correspondenceAddress));
+    }
     // if(event.target.value === "Address as per KRA"){
     //   setIsPermanentAadhaarAddress(false);
     // }
@@ -167,11 +202,11 @@ function Address() {
         )} */}
         {permanentAddressValue === "Address as per Aadhaar" ? (
         <label style={{ opacity: "0.8" }} className="display_address">
-          {user_data?.APP_PER_ADD1}, {user_data?.APP_PER_STATE}, {user_data?.APP_PER_CITY}, {user_data?.APP_PER_PINCD}
+          {aadhaar_data?.house}, {aadhaar_data?.street}, {aadhaar_data?.loc}, {user_data?.pc}
         </label>
       ) : permanentAddressValue === "Address as per KRA" ? (
         <label style={{ opacity: "0.8" }} className="display_address">
-          {user_data?.APP_COR_ADD1}, {user_data?.APP_COR_STATE}, {user_data?.APP_COR_CITY}, {user_data?.APP_COR_PINCD}
+          {user_data?.APP_PER_ADD1}, {user_data?.APP_PER_STATE}, {user_data?.APP_PER_CITY}, {user_data?.APP_PER_PINCD}
         </label>
       ) : null}
 
@@ -310,7 +345,7 @@ function Address() {
                     className="form-control input_style"
                     id="pan"
                     disabled={true}
-                    defaultValue={user_data?.APP_PER_ADD1 ?? "NA"}
+                    defaultValue={aadhaar_data?.house ?? "NA"}
                   />
                 </div>
               </div>
@@ -344,7 +379,7 @@ function Address() {
                     className="form-control input_style"
                     id="pan"
                     disabled={true}
-                    defaultValue={user_data?.APP_PER_CITY ?? "NA"}
+                    defaultValue={aadhaar_data?.subdist ?? "NA"}
                   />
                 </div>
               </div>
@@ -359,7 +394,7 @@ function Address() {
                     className="form-control input_style"
                     id="pan"
                     disabled={true}
-                    defaultValue={user_data?.APP_PER_STATE ?? "NA"}
+                    defaultValue={aadhaar_data?.state ?? "NA"}
                   />
                 </div>
               </div>
@@ -375,7 +410,7 @@ function Address() {
                 id="pincode"
                 name="APP_COR_PINCD"
                 disabled={true}
-                defaultValue={user_data?.APP_PER_PINCD ?? ""}
+                defaultValue={aadhaar_data?.pc ?? ""}
                 onChange={handleInputChange}
               />
             </div>

@@ -8,6 +8,9 @@ import Modal from "./Modal";
 function Details() {
 
     const userData = JSON.parse(localStorage.getItem("updated_form_data"));
+    const per_address = JSON.parse(localStorage.getItem("perAddress"));
+    const cor_address = JSON.parse(localStorage.getItem("corrAddress"));
+
     console.log("user_data inside details component",userData);
     const [profilePhoto, setProfilePhoto] = useState(null);
     const [showModal, setShowModal] = useState(false);
@@ -149,7 +152,7 @@ function Details() {
                     <div style={{ opacity: 0.7}}>Permanent address</div>
                 </div>
                 <div className="col-md-8">
-                {userData?.APP_PER_ADD1}, {userData?.APP_PER_STATE}, {userData?.APP_PER_CITY}, {userData?.APP_PER_PINCD}
+                {per_address?.APP_PER_ADD1}, {per_address?.APP_PER_STATE}, {per_address?.APP_PER_CITY}, {per_address?.APP_PER_PINCD}
                 </div>
             </div>
 
@@ -158,7 +161,7 @@ function Details() {
                     <div style={{ opacity: 0.7}}>Correspondence address</div>
                 </div>
                 <div className="col-md-8">
-                {userData?.APP_COR_ADD1}, {userData?.APP_COR_STATE}, {userData?.APP_COR_CITY}, {userData?.APP_COR_PINCD}
+                {cor_address?.APP_COR_ADD1}, {cor_address?.APP_COR_STATE}, {cor_address?.APP_COR_CITY}, {cor_address?.APP_COR_PINCD}
                 </div>
             </div>
 
