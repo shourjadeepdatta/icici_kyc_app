@@ -28,7 +28,7 @@ function Button(props) {
         };
 
         try {
-            const response = await fetch("http://localhost:5000/ekyc_verify", requestOptions);
+            const response = await fetch("https://api-dev.test.getkwikid.com/kyc/ekyc_verify", requestOptions);
             const data = await response.text();
             console.log("res->>",response.status);
             console.log("response->>>",data);

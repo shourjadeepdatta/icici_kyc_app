@@ -8,9 +8,10 @@ import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 
 
 function App() {
+  const basename = window.REACT_APP_BASENAME || '/icici';
   return (
     <div className="App">
-      <Router>
+      <Router basename={basename}>
         <Routes>
           <Route path="/home" Component={Parent}></Route>
           <Route path="/personalDetails" Component={Personal}></Route>

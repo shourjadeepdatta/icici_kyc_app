@@ -13,6 +13,8 @@ function Photo() {
     const [isVideoVisible, setIsVideoVisible] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const [isShutterVisible, setIsShutterVisible] = useState(false);
+    const [checkLiveliness,setCheckLiveliness] = useState(true);
+    const [livelinessDescription,setLivelinessDescription] = useState("");
 
     useEffect(() => {
         const getSavedCameraStream = async () => {
@@ -63,7 +65,7 @@ function Photo() {
 
     const handleCapture = () => {
         setIsShutterVisible(true);
-        setTimeout(() => {
+        setTimeout(async () => {
             if (canvasRef.current && videoRef.current) {
                 const context = canvasRef.current.getContext('2d');
                 canvasRef.current.width = videoRef.current.videoWidth;
@@ -71,6 +73,41 @@ function Photo() {
                 context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
                 const imageDataURL = canvasRef.current.toDataURL('image/jpeg');
                 setCapturedImage(imageDataURL);
+                const base64String = imageDataURL.split('base64,')[1];
+
+                const myHeaders = new Headers();
+                myHeaders.append("Content-Type", "application/json");
+
+                const raw = JSON.stringify({
+                    "Image1": base64String
+                });
+
+                const requestOptions = {
+                    method: "POST",
+                    headers: myHeaders,
+                    body: raw,
+                    redirect: "follow"
+                }
+
+                try {
+                    const response = await fetch("https://api-dev.test.getkwikid.com/kyc/check_liveliness", requestOptions);
+                    const data = await response.text();
+                    let livelinessResponse = JSON.parse(data);
+                    console.log("res->>",response.status);
+                    console.log("liveliness response->>>",data);
+                    setLivelinessDescription(livelinessResponse.StatusDecription);
+                    if (livelinessResponse.Liveliness === "Y") {
+                        // console.log("liveliness response->>>",data);
+                        setCheckLiveliness(true);
+
+                    } else {
+                        console.log("inside else block of liveliness api");
+                        setCheckLiveliness(false);
+                    }
+                } catch (error) {
+                    console.error('Error checking liveliness:', error);
+                }
+
                 setIsVideoVisible(false);
                 localStorage.setItem('capturedImage', imageDataURL);
             }
@@ -106,6 +143,9 @@ function Photo() {
                     </div>
                 )}
                 <div className="capture_image_container_wrapper" style={{ position: 'relative' }}>
+                    {!checkLiveliness && (<div className="liveliness_instruction">
+                        <label className="liveliness_desc">Not a live photo {livelinessDescription}</label>
+                    </div>)}
                     <div style={{marginTop:"20px"}} className="capture_image_container">
                         {isShutterVisible && <div className="shutter"></div>}
                         {isVideoVisible ? (
@@ -147,9 +187,10 @@ function Photo() {
                     <button
                         style={{height:"40px", opacity:"0.9", borderRadius:"0px"}}
                         className="btn btn-success btn-block mt-3"
+                        disabled={!checkLiveliness}
                         onClick={capturedImage ? handleContinue : handleCapture}
                     >
-                        {capturedImage ? 'Continue' : 'Take Photo'}
+                        {(capturedImage && checkLiveliness) ? 'Continue' : 'Take Photo'}
                     </button>
                 </div>
             </div>

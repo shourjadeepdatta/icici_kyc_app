@@ -12,7 +12,7 @@ function Digilocker() {
             "user_id": "GEXPD8653H",
             "phone_number": "8169935304",
             "pan": "GEXPD8653H",
-            "callback_url": "http://localhost:3000/addressDetails"
+            "callback_url": "https://app-dev.test.getkwikid.com/icici/addressDetails"
         });
 
         const requestOptions = {

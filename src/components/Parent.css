@@ -481,3 +481,7 @@
     justify-content: flex-end;
     z-index: 1000;
 }
+
+.liveliness_instruction {
+    margin-left: 10px;
+}
