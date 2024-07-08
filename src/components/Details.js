@@ -79,6 +79,13 @@ function Details() {
         localStorage.setItem("updated_form_data",JSON.stringify(userData));
     }
 
+    const goToEsign = () => {
+        const esignUrl = "https://kwikid.kyc.priv.getkwikid.com/kyc/api/v1/esign?session_id=030f6a9f-ac6f-4d0b-b883-62c1e4293004&user_id=ICICI_33389917"
+        window.location.href = esignUrl;
+        // const newTab = window.open(esignUrl, '_blank');
+        // localStorage.setItem('isReturning', 'true');
+    }
+
     
     return (
         <div>
@@ -258,7 +265,7 @@ function Details() {
         {/* <Modal show={showModal} onClose={closeModal} /> */}
         {!showModal && (<div className="fixed_div">
                 <p>By continuing you agree to CAMS KYC <a href="#">T&C</a> and <a href="#">Privacy Policy</a></p>
-                <button className="btn btn-success btn-block">Looks good! Continue</button>
+                <button onClick={goToEsign} className="btn btn-success btn-block">Looks good! Continue</button>
         </div>)}
         </div>
     );
