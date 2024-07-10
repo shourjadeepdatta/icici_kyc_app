@@ -25,6 +25,8 @@ function Address() {
   const [isPermanentAadhaarAddress, setIsPermanentAadhaarAddress] = useState(false);
   const [permanentAddressValue, setPermanentAddressValue] = useState("");
   const [correspondenceAddressValue, setCorrespondenceAddressValue] = useState("");
+  const [isPerAddressFieldChosen,setIsPerAddressFieldChosen] = useState(false);
+  const [isCorAddressFieldChosen,setIsCorAddressFieldChosen] = useState(false);
   // const [isPermanentKraAddress, setIsPermanentKraAddress] = useState(false);
 
   // const user_data = JSON.parse(localStorage.getItem("updated_user_pan_data"));
@@ -68,8 +70,10 @@ function Address() {
   const handlePerAddressInputChange = (event) => {
     event.preventDefault();
     let permanenetAddress = {}
+    const perAdd = event.target.value;
     setPermanentAddressValue(event.target.value);
-    if(event.target.value === "Address as per Aadhaar"){
+    if(perAdd.includes("Aadhaar")){
+      setIsPerAddressFieldChosen(true);
       permanenetAddress["APP_PER_ADD1"] = aadhaar_data.house;
       permanenetAddress["APP_PER_STATE"] = aadhaar_data.state;
       permanenetAddress["APP_PER_CITY"] = aadhaar_data.subdist;
@@ -78,6 +82,7 @@ function Address() {
       localStorage.setItem("perAddress",JSON.stringify(permanenetAddress));
     }
     else{
+      setIsPerAddressFieldChosen(false);
       permanenetAddress["APP_PER_ADD1"] = user_data.APP_PER_ADD1;
       permanenetAddress["APP_PER_STATE"] = user_data.APP_PER_STATE;
       permanenetAddress["APP_PER_CITY"] = user_data.APP_PER_CITY;
@@ -98,9 +103,11 @@ function Address() {
 
   const handleCorAddressInputChange = (event) => {
     event.preventDefault();
+    const corrAdd = event.target.value;
     let correspondenceAddress = {}
     setCorrespondenceAddressValue(event.target.value);
-    if(event.target.value === "Address as per Aadhaar"){
+    if(corrAdd.includes("Aadhaar")){
+      setIsCorAddressFieldChosen(true);
       correspondenceAddress["APP_COR_ADD1"] = aadhaar_data.house;
       correspondenceAddress["APP_COR_STATE"] = aadhaar_data.state;
       correspondenceAddress["APP_COR_CITY"] = aadhaar_data.subdist;
@@ -109,6 +116,7 @@ function Address() {
       localStorage.setItem("corrAddress",JSON.stringify(correspondenceAddress));
     }
     else{
+      setIsCorAddressFieldChosen(false);
       correspondenceAddress["APP_COR_ADD1"] = user_data.APP_COR_ADD1;
       correspondenceAddress["APP_COR_STATE"] = user_data.APP_COR_STATE;
       correspondenceAddress["APP_COR_CITY"] = user_data.APP_COR_CITY;
@@ -161,6 +169,10 @@ function Address() {
     }));
   };
 
+  useEffect(()=>{
+    console.log("is the button enabled->>",isPerAddressFieldChosen);
+    console.log("is the button enabled->>",isCorAddressFieldChosen);
+  },[isPerAddressFieldChosen,isCorAddressFieldChosen])
   
 
   return (
@@ -181,8 +193,8 @@ function Address() {
           onChange={handlePerAddressInputChange}
         >
           <option>Select an option</option>
-          <option>Address as per Aadhaar</option>
-          <option>Address as per KRA</option>
+          <option>Aadhaar : {aadhaar_data?.house}, {aadhaar_data?.street}, {aadhaar_data?.loc}, {user_data?.pc}</option>
+          <option>KRA : {user_data?.APP_PER_ADD1}, {user_data?.APP_PER_STATE}, {user_data?.APP_PER_CITY}, {user_data?.APP_PER_PINCD}</option>
         </select>
 
         {/* {permanentAddressValue === "Address as per Aadhaar" ? (
@@ -200,11 +212,11 @@ function Address() {
             </label>
           </div>
         )} */}
-        {permanentAddressValue === "Address as per Aadhaar" ? (
+        {permanentAddressValue.includes("Aadhaar") ? (
         <label style={{ opacity: "0.8" }} className="display_address">
           {aadhaar_data?.house}, {aadhaar_data?.street}, {aadhaar_data?.loc}, {user_data?.pc}
         </label>
-      ) : permanentAddressValue === "Address as per KRA" ? (
+      ) : permanentAddressValue.includes("KRA") ? (
         <label style={{ opacity: "0.8" }} className="display_address">
           {user_data?.APP_PER_ADD1}, {user_data?.APP_PER_STATE}, {user_data?.APP_PER_CITY}, {user_data?.APP_PER_PINCD}
         </label>
@@ -224,12 +236,12 @@ function Address() {
           onChange={handleCorAddressInputChange}
         >
           <option>Select an option</option>
-          <option>Address as per Aadhaar</option>
-          <option>Address as per KRA</option>
+          <option>Aadhaar : {aadhaar_data?.house ?? "NA"},{aadhaar_data?.loc ?? "NA"},{aadhaar_data?.subdist ?? "NA"},{aadhaar_data?.state ?? "NA"},{aadhaar_data?.pc ?? ""}</option>
+          <option>KRA : {updated_user_data?.APP_COR_ADD1 ?? "NA"},{updated_user_data?.APP_COR_ADD2 ?? "NA"},{updated_user_data?.APP_COR_CITY ?? "NA"},{updated_user_data?.APP_COR_STATE ?? "NA"},{user_data?.APP_COR_PINCD ?? ""}</option>
           <option>New Address</option>
         </select>
 
-      {correspondenceAddressValue === "Address as per KRA" && (
+      {correspondenceAddressValue.includes("KRA") && (
         <div>
           <div>
             <div className="form_container_v2">
@@ -331,7 +343,7 @@ function Address() {
           </select> */}
         </div>
       )}
-      {correspondenceAddressValue === "Address as per Aadhaar" && (
+      {correspondenceAddressValue.includes("Aadhaar") && (
         <div>
           <div>
             <div className="form_container_v2">
@@ -360,7 +372,7 @@ function Address() {
                     className="form-control input_style"
                     id="pan"
                     disabled={true}
-                    defaultValue={user_data?.APP_PER_ADD2 ?? "NA"}
+                    defaultValue={aadhaar_data?.loc ?? "NA"}
                   />
                 </div>
               </div>
@@ -570,6 +582,7 @@ function Address() {
             style={{borderRadius:"0px", height:"45px", opacity:"0.9"}}
             onClick={moveToNextPage}
             type="submit"
+            disabled={!(isPerAddressFieldChosen || isCorAddressFieldChosen)}
             className="btn btn-success btn-block mt-3"
           >
             Continue

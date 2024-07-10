@@ -11,8 +11,9 @@ function Button(props) {
         myHeaders.append("Content-Type", "application/json");
 
         const raw = JSON.stringify({
-            "APP_PAN_NO": props.pan,
-            "APP_PAN_DOB": "25-05-1975",
+            "APP_PAN_NO": props.pan.panNo,
+            // "APP_PAN_DOB": "25-05-1975",
+            "APP_PAN_DOB":props.pan.dob,
             "APP_POS_CODE": "L",
             "APP_OTHKRA_CODE": "THINKEKYC",
             "APP_OTHKRA_BATCH": "TEST 22-05-2017",

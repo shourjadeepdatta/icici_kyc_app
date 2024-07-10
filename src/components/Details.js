@@ -10,7 +10,26 @@ function Details() {
     const userData = JSON.parse(localStorage.getItem("updated_form_data"));
     const per_address = JSON.parse(localStorage.getItem("perAddress"));
     const cor_address = JSON.parse(localStorage.getItem("corrAddress"));
-
+    const genderMapper = {
+        "M":"Male",
+        "F":"Female",
+        "O":"Other"
+    }
+    const reverseGenderMapper = {
+        "Male":"M",
+        "Female":"F",
+        "Other":"O"
+    }
+    const maritalStatusMapper = {
+        "02":"Unmarried",
+        "01":"Married",
+        "03":"Others"
+    }
+    const reverseMaritalStatusMapper = {
+        "Unmarried":"02",
+        "Married":"01",
+        "Others":"03"
+    }
     console.log("user_data inside details component",userData);
     const [profilePhoto, setProfilePhoto] = useState(null);
     const [showModal, setShowModal] = useState(false);
@@ -52,9 +71,11 @@ function Details() {
             setProfilePhoto(savedImage);
         }
         console.log("applicant gender from storage->>",userData?.APP_GEN);
-        setGenderValue(userData?.APP_GEN);
+        // setGenderValue(userData?.APP_GEN);
+        setGenderValue(genderMapper[userData?.APP_GEN]);
         console.log("applicant marital status from storage ->>",userData?.APP_MAR_STATUS);
-        setMaritalStatusValue(userData?.APP_MAR_STATUS);
+        // setMaritalStatusValue(userData?.APP_MAR_STATUS);
+        setMaritalStatusValue(maritalStatusMapper[userData?.APP_MAR_STATUS]);
     }, []);
 
     useEffect(() => {
@@ -74,7 +95,7 @@ function Details() {
         setMaritalStatusValue(newMaritalStatus);
         console.log("marital status after selection->>>",e.target.value);
         console.log("marital status after selection->>>",maritalStatusValue);
-        userData["APP_MAR_STATUS"] = e.target.value;
+        userData["APP_MAR_STATUS"] = reverseMaritalStatusMapper[e.target.value];
         
         localStorage.setItem("updated_form_data",JSON.stringify(userData));
     }
@@ -217,7 +238,7 @@ function Details() {
                     }} className="gender_option">Male</div>
                     <div onClick={()=>{
                         setGenderValue("Female");
-                        userData["APP_GEN"] = "Female";
+                        userData["APP_GEN"] = reverseGenderMapper["Female"];
                         localStorage.setItem("updated_form_data",JSON.stringify(userData));
                     }} className="gender_option">Female</div>
                     <div onClick={()=>{
@@ -251,8 +272,9 @@ function Details() {
                             onChange={handleMaritalStatusChange}
                             >
                                 <option>Select Gender</option>
-                                <option>Single</option>
+                                <option>Unmarried</option>
                                 <option>Married</option>
+                                <option>Others</option>
                             </select>
                         </div>
                     </div>

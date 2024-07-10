@@ -4,14 +4,38 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 function Digilocker() {
 
+    function transformApiResponse(response) {
+        // Check if response is valid JSON
+        let responseObject;
+        try {
+          responseObject = JSON.parse(response);
+        } catch (error) {
+          console.error("Invalid JSON response:", error);
+          return null;
+        }
+      
+        // Transform keys
+        const transformedResponse = {};
+        for (const key in responseObject) {
+          if (key.startsWith('@')) {
+            const newKey = key.slice(1); // Remove the '@' character
+            transformedResponse[newKey] = responseObject[key];
+          } else {
+            transformedResponse[key] = responseObject[key];
+          }
+        }
+      
+        return transformedResponse;
+      }
+
     const proceedToDigilocker = async() => {
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
         const raw = JSON.stringify({
-            "user_id": "GEXPD8653H",
+            "user_id": atob(localStorage.getItem("p")),
             "phone_number": "8169935304",
-            "pan": "GEXPD8653H",
+            "pan": atob(localStorage.getItem("p")),
             "callback_url": "https://app-dev.test.getkwikid.com/icici/addressDetails"
         });
 
@@ -23,19 +47,25 @@ function Digilocker() {
         };
 
         console.log("hitting the api")
-        localStorage.setItem("Aadhaar_address",JSON.stringify({
-            "co": "S/O: Prasad Joshi",
-            "country": "India",
-            "dist": "Mumbai",
-            "house": "D2, Kalpana Bldg, Girgaum CHS",
-            "loc": "Girgaum",
-            "pc": "400004",
-            "po": "Girgaon",
-            "state": "Maharashtra",
-            "street": "V.P. Road",
-            "subdist": "Mumbai",
-            "vtc": "Mumbai"
-        }));
+        const NewrequestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: raw,
+            redirect: "follow"
+        };
+
+        try {
+            const add_response = await fetch("https://legacyclients.kyc.getkwikid.com/kyc/api/v1/get_digilocker_data/XCVAD", NewrequestOptions);
+            const digi_address_response = await add_response.json();
+            console.log(digi_address_response["aadhaarDetails"]["Certificate"]["CertificateData"]["KycRes"]["UidData"]["Poa"])
+            const digi_address_object = digi_address_response["aadhaarDetails"]["Certificate"]["CertificateData"]["KycRes"]["UidData"]["Poa"];
+            const transformedResponse = transformApiResponse(JSON.stringify(digi_address_object));
+            localStorage.setItem("Aadhaar_address",JSON.stringify(transformedResponse));
+        }
+        catch(e){
+            console.error('Error fetching digi address data:', e);
+        }
+        
         try {
             const response = await fetch("https://legacyclients.kyc.getkwikid.com/kyc/cams/digi", requestOptions);
             const digi_response = await response.json();

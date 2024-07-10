@@ -6,11 +6,23 @@ import Navbar from './Navbar';
 import Form from './Form';
 import Button from './Button';
 import Header from './Header';
+import { useSearchParams } from 'react-router-dom';
 
 function Parent() {
     const [isPanValid, setIsPanValid] = useState(true);
-    const [stageOneData, setStageOneData] = useState({ "panNo": "BAMPM9343K" });
-    const [updatedPan, setUpdatedPan] = useState("BAMPM9343K");
+    const [searchParams] = useSearchParams();
+    const panNo = searchParams.get('p');
+    const dob = searchParams.get('d');
+    const icici_phone = searchParams.get('ip');
+    const icici_email = searchParams.get('ie');
+    localStorage.setItem("p",panNo);
+    localStorage.setItem("d",dob);
+    localStorage.setItem("icici_phone",icici_phone);
+    localStorage.setItem("icici_email",icici_email);
+    const [updatedPan, setUpdatedPan] = useState(atob(panNo));
+    const [Dob, setDob] = useState(atob(dob));
+    const [stageOneData, setStageOneData] = useState({ "panNo": updatedPan ,"dob":Dob});
+    // const [updatedPan, setUpdatedPan] = useState(panNo);
     const [errorMessage, setErrorMessage] = useState('');
 
     const handlePanVerificationError = (error) => {
@@ -24,6 +36,56 @@ function Parent() {
     useEffect(() => {
       console.log("error in use effect",errorMessage);
     },[errorMessage]);
+
+    useEffect(()=>{
+        try{
+        localStorage.removeItem("user_pan_data");
+        }
+        catch(error){
+            console.log("while removing error",error);
+        }
+
+        try{
+            localStorage.removeItem("updated_user_pan_data");
+        }
+        catch(error){
+            console.log("while removing error",error);
+        }
+
+        try{
+            localStorage.removeItem("updated_form_data");
+        }
+        catch(error){
+            console.log("while removing error",error);
+        }
+
+        try{
+            localStorage.removeItem("Aadhaar_address");
+        }
+        catch(error){
+            console.log("while removing error",error);
+        }
+        try{
+            localStorage.removeItem("perAddress");
+        }
+        catch(error){
+            console.log("while removing error",error);
+        }
+        try{
+            localStorage.removeItem("corrAddress");
+        }
+        catch(error){
+            console.log("while removing error",error);
+        }
+
+        try{
+            localStorage.removeItem("capturedImage");
+        }
+        catch(error){
+            console.log("while removing error",error);
+        }
+        
+    },[])
     return (
         <div>
             <Navbar />
@@ -37,7 +99,7 @@ function Parent() {
                 {/* {(errorMessage && errorMessage.length > 0) && <div className="alert alert-danger mt-3">{errorMessage}</div>} */}
                 <Button
                     disabled={!isPanValid || false}
-                    pan={updatedPan}
+                    pan={stageOneData}
                     onError={handlePanVerificationError}
                 />
                 

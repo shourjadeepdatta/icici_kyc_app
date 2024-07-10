@@ -15,7 +15,11 @@ function PersonalForm(props) {
     const [showEmailInputOption,setShowEmailInputOption] = useState(true);
     const [showEmailInputValue,setShowEmailInputValue] = useState(false);
     let user_form_data = JSON.parse(localStorage.getItem("updated_user_pan_data"));
-
+    const ip = atob(localStorage.getItem("icici_phone"));
+    const ie = atob(localStorage.getItem("icici_email"))
+    const [iciciPhone,setIciciPhone] = useState(ip);
+    const [iciciEmail,setIciciEmail] = useState(ie);
+    
     const maskEmail = (value) => {
         user_form_data = JSON.parse(localStorage.getItem("updated_form_data"));
         if(!user_form_data){
@@ -72,16 +76,19 @@ function PersonalForm(props) {
 
     const feedPhoneNumber = (e) => {
         user_form_data = JSON.parse(localStorage.getItem("updated_user_pan_data"));
+        const phone = e.target.value;
         console.log("event value->>>",e.target.value);
-        if(e.target.value === "Mobile Number as per KRA"){
+        console.log("event object->>",e);
+        if(phone.includes("KRA")){
             setSelectedValue(user_form_data["APP_MOB_NO"]);
             setShowInputOption(false)
-            setShowInputValue(true);
+                setShowInputValue(true);
             console.log("akdmdmdalkmd->>>",user_form_data["APP_MOB_NO"]);
             console.log("changed value of mobile number is->>",selectedValue);
         }
         else{
-            setSelectedValue("8169935304");
+            console.log("icici mobile number is ->>>",ip);
+            setSelectedValue(ip);
             setShowInputOption(false)
             setShowInputValue(true);
             console.log("akdmdmdalkmd->>>",user_form_data["APP_MOB_NO"]);
@@ -124,8 +131,9 @@ function PersonalForm(props) {
 
     const feedEmail = (e) => {
         user_form_data = JSON.parse(localStorage.getItem("updated_user_pan_data"));
+        const email = e.target.value;
         console.log("event value->>>",e.target.value);
-        if(e.target.value === "Email ID as per KRA"){
+        if(email.includes("KRA")){
             setSelectedEmailValue(user_form_data["APP_EMAIL"]);
             setShowEmailInputOption(false)
             setShowEmailInputValue(true);
@@ -133,7 +141,8 @@ function PersonalForm(props) {
             console.log("changed value of mobile number is->>",selectedEmailValue);
         }
         else{
-            setSelectedEmailValue("abc@gmail.com");
+            console.log("icici_email is->>>",ie);
+            setSelectedEmailValue(ie);
             setShowEmailInputOption(false)
             setShowEmailInputValue(true);
             console.log("akdmdmdalkmd->>>",user_form_data["APP_EMAIL"]);
@@ -209,8 +218,8 @@ function PersonalForm(props) {
                             {mobileError && <div className="error_message">{mobileError}</div>} */}
                             {showInputOption && (<select value={selectedValue} onChange={feedPhoneNumber} style={{height:"35px", width:"100%",backgroundColor:"rgb(226, 223, 223)"}}>
                                 <option>Select Option</option>
-                                <option>Mobile number as per ICICI</option>
-                                <option>Mobile Number as per KRA</option>
+                                <option id="MOB_ICICI">ICICI : {iciciPhone}</option>
+                                <option id="MOB_KRA">KRA : {user_form_data["APP_MOB_NO"]}</option>
                             </select>)}
                             {showInputValue && (
                                 <div className="input_wrapper">
@@ -249,8 +258,8 @@ function PersonalForm(props) {
                             {emailError && <div className="error_message">{emailError}</div>} */}
                             {showEmailInputOption && (<select value={selectedEmailValue} onChange={feedEmail} style={{height:"35px", width:"100%",backgroundColor:"rgb(226, 223, 223)"}}>
                                 <option>Select Option</option>
-                                <option>Email ID as per ICICI</option>
-                                <option>Email ID as per KRA</option>
+                                <option>ICICI : {iciciEmail}</option>
+                                <option>KRA : {user_form_data["APP_EMAIL"]}</option>
                             </select>)}
 
                             {showEmailInputValue && (<div className="input_wrapper">
