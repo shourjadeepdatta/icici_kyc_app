@@ -10,8 +10,32 @@ import { ReactComponent as DeleteIcon } from "../assets/images/delete-svgrepo-co
 // import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 function Address() {
+  function transformApiResponse(response) {
+    // Check if response is valid JSON
+    let responseObject;
+    try {
+      responseObject = JSON.parse(response);
+    } catch (error) {
+      console.error("Invalid JSON response:", error);
+      return null;
+    }
+  
+    // Transform keys
+    const transformedResponse = {};
+    for (const key in responseObject) {
+      if (key.startsWith('@')) {
+        const newKey = key.slice(1); // Remove the '@' character
+        transformedResponse[newKey] = responseObject[key];
+      } else {
+        transformedResponse[key] = responseObject[key];
+      }
+    }
+  
+    return transformedResponse;
+  }
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
+  let willNotMove = true;
   
 
   // State variables
@@ -27,11 +51,13 @@ function Address() {
   const [correspondenceAddressValue, setCorrespondenceAddressValue] = useState("");
   const [isPerAddressFieldChosen,setIsPerAddressFieldChosen] = useState(false);
   const [isCorAddressFieldChosen,setIsCorAddressFieldChosen] = useState(false);
+  const [showErrorMessage,setShowErrorMessage] = useState(false);
   // const [isPermanentKraAddress, setIsPermanentKraAddress] = useState(false);
 
   // const user_data = JSON.parse(localStorage.getItem("updated_user_pan_data"));
   const user_data = JSON.parse(localStorage.getItem("updated_form_data"));
-  const aadhaar_data  = JSON.parse(localStorage.getItem("Aadhaar_address"));
+  // const aadhaar_data  = JSON.parse(localStorage.getItem("Aadhaar_address"));
+  let [aadhaar_data,setAadhaarData] = useState({});
   const updated_user_data = {...user_data};
   console.log("updated_user_data->>>",updated_user_data);
   // Effect to load form data from localStorage on component mount
@@ -66,6 +92,34 @@ function Address() {
       [name]: value,
     }));
   };
+
+  const getDigiAddress = async ()=>{
+    console.log("hitting the api")
+    const myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        const NewrequestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            // body: raw,
+            redirect: "follow"
+        };
+
+        try {
+            const add_response = await fetch(`https://legacyclients.kyc.getkwikid.com/kyc/api/v1/get_digilocker_data/${atob(localStorage.getItem("p"))}`, NewrequestOptions);
+            const digi_address_response = await add_response.json();
+            console.log(digi_address_response["aadhaarDetails"]["Certificate"]["CertificateData"]["KycRes"]["UidData"]["Poa"])
+            const digi_address_object = digi_address_response["aadhaarDetails"]["Certificate"]["CertificateData"]["KycRes"]["UidData"]["Poa"];
+            const transformedResponse = transformApiResponse(JSON.stringify(digi_address_object));
+            localStorage.setItem("Aadhaar_address",JSON.stringify(transformedResponse));
+        }
+        catch(e){
+            console.error('Error fetching digi address data:', e);
+        }
+        
+        aadhaar_data = JSON.parse(localStorage.getItem("Aadhaar_address"));
+        setAadhaarData(aadhaar_data);
+        console.log("aadahr adnadnwdn->>>",aadhaar_data);
+  }
 
   const handlePerAddressInputChange = (event) => {
     event.preventDefault();
@@ -136,11 +190,21 @@ function Address() {
   };
 
   const moveToNextPage = () => {
+    if(!(isPerAddressFieldChosen || isCorAddressFieldChosen)){
+      willNotMove = true;
+    }
+    else{
+      willNotMove = false;
+    }
     console.log("going to take photo now");
+    console.log("set show variable->>",showErrorMessage);
     // setFormData()
     // Save updated data to localStorage under a new key
-    localStorage.setItem("updated_form_data", JSON.stringify(updatedFormData));
-    navigate("/takePhoto");
+    if(!willNotMove){
+      localStorage.setItem("updated_form_data", JSON.stringify(updatedFormData));
+      navigate("/takePhoto");
+    }
+    
   };
 
   const handleClick = () => {
@@ -173,6 +237,11 @@ function Address() {
     console.log("is the button enabled->>",isPerAddressFieldChosen);
     console.log("is the button enabled->>",isCorAddressFieldChosen);
   },[isPerAddressFieldChosen,isCorAddressFieldChosen])
+
+
+  useEffect(()=>{
+    getDigiAddress();
+  },[])
   
 
   return (
@@ -181,6 +250,9 @@ function Address() {
       <div className="container">
         <Header title="Address details" />
       </div>
+      {willNotMove && (<div className="liveliness_instruction">
+        <label className="liveliness_desc" style={{color:"red"}}>Atleast one field chosen should be aadhaar field</label>
+    </div>)}
       <div className="dropdown_container">
         <div style={{width:"100%",marginTop:"20px",paddingRight:"20px"}}className="dropdown_title">
           <label className="permanent_address_label">Permanent Address</label>
@@ -582,7 +654,6 @@ function Address() {
             style={{borderRadius:"0px", height:"45px", opacity:"0.9"}}
             onClick={moveToNextPage}
             type="submit"
-            disabled={!(isPerAddressFieldChosen || isCorAddressFieldChosen)}
             className="btn btn-success btn-block mt-3"
           >
             Continue

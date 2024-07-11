@@ -46,25 +46,25 @@ function Digilocker() {
         redirect: "follow"
         };
 
-        console.log("hitting the api")
-        const NewrequestOptions = {
-            method: "POST",
-            headers: myHeaders,
-            body: raw,
-            redirect: "follow"
-        };
+        // console.log("hitting the api")
+        // const NewrequestOptions = {
+        //     method: "POST",
+        //     headers: myHeaders,
+        //     body: raw,
+        //     redirect: "follow"
+        // };
 
-        try {
-            const add_response = await fetch("https://legacyclients.kyc.getkwikid.com/kyc/api/v1/get_digilocker_data/XCVAD", NewrequestOptions);
-            const digi_address_response = await add_response.json();
-            console.log(digi_address_response["aadhaarDetails"]["Certificate"]["CertificateData"]["KycRes"]["UidData"]["Poa"])
-            const digi_address_object = digi_address_response["aadhaarDetails"]["Certificate"]["CertificateData"]["KycRes"]["UidData"]["Poa"];
-            const transformedResponse = transformApiResponse(JSON.stringify(digi_address_object));
-            localStorage.setItem("Aadhaar_address",JSON.stringify(transformedResponse));
-        }
-        catch(e){
-            console.error('Error fetching digi address data:', e);
-        }
+        // try {
+        //     const add_response = await fetch(`https://legacyclients.kyc.getkwikid.com/kyc/api/v1/get_digilocker_data/${atob(localStorage.getItem("p"))}`, NewrequestOptions);
+        //     const digi_address_response = await add_response.json();
+        //     console.log(digi_address_response["aadhaarDetails"]["Certificate"]["CertificateData"]["KycRes"]["UidData"]["Poa"])
+        //     const digi_address_object = digi_address_response["aadhaarDetails"]["Certificate"]["CertificateData"]["KycRes"]["UidData"]["Poa"];
+        //     const transformedResponse = transformApiResponse(JSON.stringify(digi_address_object));
+        //     localStorage.setItem("Aadhaar_address",JSON.stringify(transformedResponse));
+        // }
+        // catch(e){
+        //     console.error('Error fetching digi address data:', e);
+        // }
         
         try {
             const response = await fetch("https://legacyclients.kyc.getkwikid.com/kyc/cams/digi", requestOptions);
