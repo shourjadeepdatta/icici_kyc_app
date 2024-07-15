@@ -208,7 +208,7 @@ function Details() {
                     </div>
                     
                     <div className="col-md-4 title_texts">
-                        <div style={{ opacity: 0.7 }}>marital Status</div>
+                        <div style={{ opacity: 0.7 }}>Marital Status</div>
                         <div className="col-md-8">
                             {maritalStatusValue} <EditIcon onClick={openModalForMaritalStatus} className="details_edit_icon"/>
                         </div>

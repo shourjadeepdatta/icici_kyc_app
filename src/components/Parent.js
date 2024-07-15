@@ -10,6 +10,7 @@ import { useSearchParams } from 'react-router-dom';
 
 function Parent() {
     const [isPanValid, setIsPanValid] = useState(true);
+    const [shouldDisable,setShouldDisable] = useState(false);
     const [searchParams] = useSearchParams();
     const panNo = searchParams.get('p');
     const dob = searchParams.get('d');

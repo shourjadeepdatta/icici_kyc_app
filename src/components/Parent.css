@@ -1,6 +1,6 @@
 .container {
     max-width: 500px;
-    margin-top: 50px;
+    margin-top: 30px;
     padding-left: 20px;
     padding-right: 20px;
 }
@@ -124,7 +124,7 @@
 
 .capture_image_container {
     height: 100%;
-    margin-left: 10px;
+    margin-left: 6px;
     margin-right: 10px;
     background-color:rgb(230, 226, 226);
 }
@@ -159,7 +159,7 @@
 
 .detail_filler {
     margin: 10px;
-    margin-left: 10px;
+    margin-left: 8px;
 }
 
 .profile-pic {
@@ -186,13 +186,13 @@
 
 
 .dropdown_container {
-    margin: 10px;
-    padding-left: 8px;
-    padding-right: 8px;
+    /* margin: 0px; */
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 .digi_button {
-    padding: 8px;
+    margin-left: 5px;
 }
 
 .dropdown_title {

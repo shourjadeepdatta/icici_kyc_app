@@ -52,10 +52,10 @@ function Button(props) {
 
     return (
         <div className="digi_button">
-            <button
+            {props.disabled && (<button
                 disabled={props.disabled}
                 onClick={hitPanVerify}
-                style={{ height: "50px", opacity: "0.9", borderRadius: "0px" }}
+                style={{ height: "50px", opacity: "0.9", borderRadius: "0px" ,backgroundColor:"grey"}}
                 type="submit"
                 className="btn btn-success btn-block mt-3"
             >
@@ -64,7 +64,20 @@ function Button(props) {
                 ) : (
                     "Confirm"
                 )}
-            </button>
+            </button>)}
+            {!(props.disabled) && (<button
+                disabled={props.disabled}
+                onClick={hitPanVerify}
+                style={{ height: "50px", opacity: "0.9", borderRadius: "0px"}}
+                type="submit"
+                className="btn btn-success btn-block mt-3"
+            >
+                {isLoading ? (
+                    <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                ) : (
+                    "Confirm"
+                )}
+            </button>)}
         </div>
     );
 }

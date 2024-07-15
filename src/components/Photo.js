@@ -133,7 +133,7 @@ function Photo() {
             <Navbar />
             <div className="container">
                 <Header title="Capture Photo"/>
-            </div>
+            
             <div className="content_container">
                 {isLoading && (
                     <div className="loader-overlay">
@@ -184,15 +184,23 @@ function Photo() {
                     </div>
                 </div>
                 <div className="capture_button">
-                    <button
+                    {checkLiveliness && (<button
                         style={{height:"40px", opacity:"0.9", borderRadius:"0px"}}
                         className="btn btn-success btn-block mt-3"
-                        disabled={!checkLiveliness}
                         onClick={capturedImage ? handleContinue : handleCapture}
                     >
                         {(capturedImage && checkLiveliness) ? 'Continue' : 'Take Photo'}
-                    </button>
+                    </button>)}
+                    {!checkLiveliness && (<button
+                        style={{height:"40px", opacity:"0.9", borderRadius:"0px",backgroundColor:"grey"}}
+                        className="btn btn-success btn-block mt-3"
+                        disabled={true}
+                        onClick={capturedImage ? handleContinue : handleCapture}
+                    >
+                        {(capturedImage && checkLiveliness) ? 'Continue' : 'Take Photo'}
+                    </button>)}
                 </div>
+            </div>
             </div>
         </div>
     );

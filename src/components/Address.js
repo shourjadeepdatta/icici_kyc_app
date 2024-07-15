@@ -126,7 +126,7 @@ function Address() {
     let permanenetAddress = {}
     const perAdd = event.target.value;
     setPermanentAddressValue(event.target.value);
-    if(perAdd.includes("Aadhaar")){
+    if(perAdd.includes("1.")){
       setIsPerAddressFieldChosen(true);
       permanenetAddress["APP_PER_ADD1"] = aadhaar_data.house;
       permanenetAddress["APP_PER_STATE"] = aadhaar_data.state;
@@ -160,7 +160,7 @@ function Address() {
     const corrAdd = event.target.value;
     let correspondenceAddress = {}
     setCorrespondenceAddressValue(event.target.value);
-    if(corrAdd.includes("Aadhaar")){
+    if(corrAdd.includes("1.")){
       setIsCorAddressFieldChosen(true);
       correspondenceAddress["APP_COR_ADD1"] = aadhaar_data.house;
       correspondenceAddress["APP_COR_STATE"] = aadhaar_data.state;
@@ -249,10 +249,10 @@ function Address() {
       <Navbar />
       <div className="container">
         <Header title="Address details" />
-      </div>
-      {willNotMove && (<div className="liveliness_instruction">
-        <label className="liveliness_desc" style={{color:"red"}}>Atleast one field chosen should be aadhaar field</label>
-    </div>)}
+      
+        {willNotMove && (<div className="liveliness_instruction">
+          <label className="liveliness_desc" style={{color:"red",marginLeft:"-5px"}}>Atleast one field chosen should be aadhaar field</label>
+      </div>)}
       <div className="dropdown_container">
         <div style={{width:"100%",marginTop:"20px",paddingRight:"20px"}}className="dropdown_title">
           <label className="permanent_address_label">Permanent Address</label>
@@ -265,8 +265,8 @@ function Address() {
           onChange={handlePerAddressInputChange}
         >
           <option>Select an option</option>
-          <option>Aadhaar : {aadhaar_data?.house}, {aadhaar_data?.street}, {aadhaar_data?.loc}, {user_data?.pc}</option>
-          <option>KRA : {user_data?.APP_PER_ADD1}, {user_data?.APP_PER_STATE}, {user_data?.APP_PER_CITY}, {user_data?.APP_PER_PINCD}</option>
+          <option>1. {aadhaar_data?.house}, {aadhaar_data?.street}, {aadhaar_data?.loc}, {user_data?.pc}</option>
+          <option>2. {user_data?.APP_PER_ADD1}, {user_data?.APP_PER_STATE}, {user_data?.APP_PER_CITY}, {user_data?.APP_PER_PINCD}</option>
         </select>
 
         {/* {permanentAddressValue === "Address as per Aadhaar" ? (
@@ -284,11 +284,11 @@ function Address() {
             </label>
           </div>
         )} */}
-        {permanentAddressValue.includes("Aadhaar") ? (
+        {permanentAddressValue.includes("1.") ? (
         <label style={{ opacity: "0.8" }} className="display_address">
           {aadhaar_data?.house}, {aadhaar_data?.street}, {aadhaar_data?.loc}, {user_data?.pc}
         </label>
-      ) : permanentAddressValue.includes("KRA") ? (
+      ) : permanentAddressValue.includes("2.") ? (
         <label style={{ opacity: "0.8" }} className="display_address">
           {user_data?.APP_PER_ADD1}, {user_data?.APP_PER_STATE}, {user_data?.APP_PER_CITY}, {user_data?.APP_PER_PINCD}
         </label>
@@ -308,12 +308,12 @@ function Address() {
           onChange={handleCorAddressInputChange}
         >
           <option>Select an option</option>
-          <option>Aadhaar : {aadhaar_data?.house ?? "NA"},{aadhaar_data?.loc ?? "NA"},{aadhaar_data?.subdist ?? "NA"},{aadhaar_data?.state ?? "NA"},{aadhaar_data?.pc ?? ""}</option>
-          <option>KRA : {updated_user_data?.APP_COR_ADD1 ?? "NA"},{updated_user_data?.APP_COR_ADD2 ?? "NA"},{updated_user_data?.APP_COR_CITY ?? "NA"},{updated_user_data?.APP_COR_STATE ?? "NA"},{user_data?.APP_COR_PINCD ?? ""}</option>
+          <option>1. {aadhaar_data?.house ?? "NA"},{aadhaar_data?.loc ?? "NA"},{aadhaar_data?.subdist ?? "NA"},{aadhaar_data?.state ?? "NA"},{aadhaar_data?.pc ?? ""}</option>
+          <option>2. {updated_user_data?.APP_COR_ADD1 ?? "NA"},{updated_user_data?.APP_COR_ADD2 ?? "NA"},{updated_user_data?.APP_COR_CITY ?? "NA"},{updated_user_data?.APP_COR_STATE ?? "NA"},{user_data?.APP_COR_PINCD ?? ""}</option>
           <option>New Address</option>
         </select>
 
-      {correspondenceAddressValue.includes("KRA") && (
+      {correspondenceAddressValue.includes("1.") && (
         <div>
           <div>
             <div className="form_container_v2">
@@ -415,7 +415,7 @@ function Address() {
           </select> */}
         </div>
       )}
-      {correspondenceAddressValue.includes("Aadhaar") && (
+      {correspondenceAddressValue.includes("2.") && (
         <div>
           <div>
             <div className="form_container_v2">
@@ -650,15 +650,25 @@ function Address() {
             Continue
           </Button> */}
           <div className="digi_button">
-          <button
+          {(isPerAddressFieldChosen || isCorAddressFieldChosen) && (<button
             style={{borderRadius:"0px", height:"45px", opacity:"0.9"}}
             onClick={moveToNextPage}
             type="submit"
             className="btn btn-success btn-block mt-3"
           >
             Continue
-          </button>
+          </button>)}
+          {!(isPerAddressFieldChosen || isCorAddressFieldChosen) && (<button
+            style={{borderRadius:"0px", height:"45px", opacity:"0.9",backgroundColor:"grey"}}
+            onClick={moveToNextPage}
+            type="submit"
+            disabled={true}
+            className="btn btn-success btn-block mt-3"
+          >
+            Continue
+          </button>)}
         </div>
+      </div>
       </div>
     </div>
   );

@@ -8,17 +8,27 @@ function PersonalForm(props) {
     const [emailError, setEmailError] = useState("");
     const [isMobileFocused, setIsMobileFocused] = useState(false);
     const [isEmailFocused, setIsEmailFocused] = useState(false);
-    const [selectedValue, setSelectedValue] = useState("");
-    const [selectedEmailValue, setSelectedEmailValue] = useState("");
+    
     const [showInputOption,setShowInputOption] = useState(true);
     const [showInputValue,setShowInputValue] = useState(false);
     const [showEmailInputOption,setShowEmailInputOption] = useState(true);
     const [showEmailInputValue,setShowEmailInputValue] = useState(false);
+    const [isKraSelected,setIsKraSelected] = useState(true);
     let user_form_data = JSON.parse(localStorage.getItem("updated_user_pan_data"));
+    let user_data = {...user_form_data};
+    console.log(" ************** ", user_form_data["APP_MOB_NO"])
+    const [selectedValue, setSelectedValue] = useState(user_data["APP_MOB_NO"]);
+    const [selectedEmailValue, setSelectedEmailValue] = useState(user_form_data["APP_EMAIL"]);
     const ip = atob(localStorage.getItem("icici_phone"));
     const ie = atob(localStorage.getItem("icici_email"))
+    const [dropdownValue,setDropdownValue] = useState(ip);
+    const [dropdownEmailValue,setDropdownEmailValue] = useState(ie);
     const [iciciPhone,setIciciPhone] = useState(ip);
     const [iciciEmail,setIciciEmail] = useState(ie);
+
+    useEffect(()=> {
+        console.log("\t&&&&& Set ");
+    }, [selectedValue])
     
     const maskEmail = (value) => {
         user_form_data = JSON.parse(localStorage.getItem("updated_form_data"));
@@ -79,21 +89,23 @@ function PersonalForm(props) {
         const phone = e.target.value;
         console.log("event value->>>",e.target.value);
         console.log("event object->>",e);
-        if(phone.includes("KRA")){
-            setSelectedValue(user_form_data["APP_MOB_NO"]);
-            setShowInputOption(false)
-                setShowInputValue(true);
-            console.log("akdmdmdalkmd->>>",user_form_data["APP_MOB_NO"]);
-            console.log("changed value of mobile number is->>",selectedValue);
-        }
-        else{
-            console.log("icici mobile number is ->>>",ip);
-            setSelectedValue(ip);
-            setShowInputOption(false)
-            setShowInputValue(true);
-            console.log("akdmdmdalkmd->>>",user_form_data["APP_MOB_NO"]);
-            console.log("changed value of mobile number is->>",selectedValue);
-        }
+        // if(phone.includes("KRA")){
+        //     setSelectedValue(user_form_data["APP_MOB_NO"]);
+        //     setShowInputOption(false)
+        //         setShowInputValue(true);
+        //     console.log("akdmdmdalkmd->>>",user_form_data["APP_MOB_NO"]);
+        //     console.log("changed value of mobile number is->>",selectedValue);
+        // }
+        // console.log("icici mobile number is ->>>",phone);
+        console.log("----> "+phone)
+        setDropdownValue(selectedValue);
+        console.log("Dropdown value is ->>>",dropdownValue);
+        setSelectedValue(phone);
+        console.log("selected_value toggled is->>>",selectedValue);
+        setShowInputOption(false)
+        setShowInputValue(true);
+        console.log("akdmdmdalkmd->>>",phone);
+        console.log("changed value of mobile number is->>",selectedValue);
         
     }
 
@@ -133,21 +145,20 @@ function PersonalForm(props) {
         user_form_data = JSON.parse(localStorage.getItem("updated_user_pan_data"));
         const email = e.target.value;
         console.log("event value->>>",e.target.value);
-        if(email.includes("KRA")){
-            setSelectedEmailValue(user_form_data["APP_EMAIL"]);
-            setShowEmailInputOption(false)
-            setShowEmailInputValue(true);
-            console.log("akdmdmdalkmd->>>",user_form_data["APP_EMAIL"]);
-            console.log("changed value of mobile number is->>",selectedEmailValue);
-        }
-        else{
-            console.log("icici_email is->>>",ie);
-            setSelectedEmailValue(ie);
-            setShowEmailInputOption(false)
-            setShowEmailInputValue(true);
-            console.log("akdmdmdalkmd->>>",user_form_data["APP_EMAIL"]);
-            console.log("changed value of mobile number is->>",selectedEmailValue);
-        }
+        // if(email.includes("KRA")){
+        //     setSelectedEmailValue(user_form_data["APP_EMAIL"]);
+        //     setShowEmailInputOption(false)
+        //     setShowEmailInputValue(true);
+        //     console.log("akdmdmdalkmd->>>",user_form_data["APP_EMAIL"]);
+        //     console.log("changed value of mobile number is->>",selectedEmailValue);
+        // }
+        // console.log("icici_email is->>>",email);
+        setDropdownEmailValue(selectedEmailValue);
+        setSelectedEmailValue(email);
+        setShowEmailInputOption(false)
+        setShowEmailInputValue(true);
+        console.log("akdmdmdalkmd->>>",user_form_data["APP_EMAIL"]);
+        console.log("changed value of mobile number is->>",selectedEmailValue);
     }
 
     const saveMobileValue = (e) => {
@@ -217,9 +228,10 @@ function PersonalForm(props) {
                             </div>
                             {mobileError && <div className="error_message">{mobileError}</div>} */}
                             {showInputOption && (<select value={selectedValue} onChange={feedPhoneNumber} style={{height:"35px", width:"100%",backgroundColor:"rgb(226, 223, 223)"}}>
-                                <option>Select Option</option>
-                                <option id="MOB_ICICI">ICICI : {iciciPhone}</option>
-                                <option id="MOB_KRA">KRA : {user_form_data["APP_MOB_NO"]}</option>
+                                <option value={selectedValue} selected disabled hidden>{selectedValue}</option>
+                                <option id="MOB_ICICI">{dropdownValue}</option>
+                                {/* {!isKraSelected && (
+                                    <option id="MOB_KRA">{user_data["APP_MOB_NO"]}</option>)} */}
                             </select>)}
                             {showInputValue && (
                                 <div className="input_wrapper">
@@ -257,9 +269,10 @@ function PersonalForm(props) {
                             </div>
                             {emailError && <div className="error_message">{emailError}</div>} */}
                             {showEmailInputOption && (<select value={selectedEmailValue} onChange={feedEmail} style={{height:"35px", width:"100%",backgroundColor:"rgb(226, 223, 223)"}}>
-                                <option>Select Option</option>
-                                <option>ICICI : {iciciEmail}</option>
-                                <option>KRA : {user_form_data["APP_EMAIL"]}</option>
+                                {/* <option>Select Option</option> */}
+                                <option value={selectedEmailValue} selected disabled hidden>{selectedEmailValue}</option>
+                                <option>{dropdownEmailValue}</option>
+                                {/* <option>{user_form_data["APP_EMAIL"]}</option> */}
                             </select>)}
 
                             {showEmailInputValue && (<div className="input_wrapper">
