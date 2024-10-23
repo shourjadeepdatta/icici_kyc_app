@@ -105,7 +105,7 @@ function Address() {
         };
 
         try {
-            const add_response = await fetch(`https://legacyclients.kyc.getkwikid.com/kyc/api/v1/get_digilocker_data/${atob(localStorage.getItem("p"))}`, NewrequestOptions);
+            const add_response = await fetch(`https://legacyclients.kyc.getkwikid.com/dev/kyc/api/v1/get_digilocker_data/${atob(localStorage.getItem("p"))}`, NewrequestOptions);
             const digi_address_response = await add_response.json();
             console.log(digi_address_response["aadhaarDetails"]["Certificate"]["CertificateData"]["KycRes"]["UidData"]["Poa"])
             const digi_address_object = digi_address_response["aadhaarDetails"]["Certificate"]["CertificateData"]["KycRes"]["UidData"]["Poa"];

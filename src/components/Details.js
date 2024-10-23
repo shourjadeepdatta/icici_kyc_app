@@ -101,7 +101,8 @@ function Details() {
     }
 
     const goToEsign = () => {
-        const esignUrl = "https://kwikid.kyc.priv.getkwikid.com/kyc/api/v1/esign?session_id=030f6a9f-ac6f-4d0b-b883-62c1e4293004&user_id=ICICI_33389917"
+        const modification_data = JSON.stringify(userData);
+        const esignUrl = `https://kwikid.kyc.priv.getkwikid.com/dev/kyc/api/v1/esign?session_id=030f6a9f-ac6f-4d0b-b883-62c1e4293004&user_id=${atob(localStorage.getItem("p"))}&modification_data=${modification_data}`
         window.location.href = esignUrl;
         // const newTab = window.open(esignUrl, '_blank');
         // localStorage.setItem('isReturning', 'true');

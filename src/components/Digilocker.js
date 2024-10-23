@@ -36,7 +36,7 @@ function Digilocker() {
             "user_id": atob(localStorage.getItem("p")),
             "phone_number": "8169935304",
             "pan": atob(localStorage.getItem("p")),
-            "callback_url": "https://app-dev.test.getkwikid.com/icici/addressDetails"
+            "callback_url": "https://kwikid.kyc.priv.getkwikid.com/dev/kyc/api/v1/ekyc/cb"
         });
 
         const requestOptions = {
@@ -67,7 +67,7 @@ function Digilocker() {
         // }
         
         try {
-            const response = await fetch("https://legacyclients.kyc.getkwikid.com/kyc/cams/digi", requestOptions);
+            const response = await fetch("https://legacyclients.kyc.getkwikid.com/dev/kyc/cams/digi", requestOptions);
             const digi_response = await response.json();
             console.log(digi_response)
             
